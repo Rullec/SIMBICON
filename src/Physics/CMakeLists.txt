@@ -22,4 +22,4 @@ UniversalJoint.cpp
 )
 
 add_library(physics ${PHYSICS_SRC})
-target_link_libraries(physics mathlib ode)
+target_link_libraries(physics mathlib ode util GLutil)

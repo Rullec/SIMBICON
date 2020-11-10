@@ -14,3 +14,4 @@ Vector.cpp
 )
 
 add_library(mathlib ${MATHLIB_SRC})
+target_link_libraries(mathlib gsl)

@@ -19,51 +19,59 @@
 	You should have received a copy of the GNU General Public License
 	along with Simbicon 1.5 Controller Editor Framework. 
 	If not, see <http://www.gnu.org/licenses/>.
+
+	Xudong: 2020/11/10 Reimplement this thread-safe timer class in Linux
 */
 
-#include <Utils\timer.h>
-
+#include <Utils/Timer.h>
+#include <sys/time.h>
 /**
 	This constructor initializes a timer.
 */
-Timer::Timer(){
-	//first, get an idea of the frequency...
-	DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), (DWORD_PTR)1);
-	QueryPerformanceFrequency((LARGE_INTEGER *)&this->frequency);
-	SetThreadAffinityMask(GetCurrentThread(), oldmask);
-	restart();
-	
+Timer::Timer()
+{
+    //first, get an idea of the frequency...
+    // DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), (DWORD_PTR)1);
+    // QueryPerformanceFrequency((LARGE_INTEGER *)&this->frequency);
+    // SetThreadAffinityMask(GetCurrentThread(), oldmask);
+    restart();
 }
 
 /**
 	Default timer destructor - doesn't do much.
 */
-Timer::~Timer(){
-}
+
+Timer::~Timer() {}
 
 /**
 	This method resets the starting time.
 */
-void Timer::restart(){
-	DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), (DWORD_PTR)1);
-	QueryPerformanceCounter((LARGE_INTEGER *)&this->startTime);
-	SetThreadAffinityMask(GetCurrentThread(), oldmask);
 
+void Timer::restart()
+{
+    // DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), (DWORD_PTR)1);
+    // QueryPerformanceCounter((LARGE_INTEGER *)&this->startTime);
+    // SetThreadAffinityMask(GetCurrentThread(), oldmask);
+    struct timeval tv;
+    struct timezone tz;
+    startTime = gettimeofday(&tv, &tz); // microseconds, 1e6 s
 }
 
 /**
 	This method returns the number of milliseconds that has ellapsed since the timer was restarted.
 */
-double Timer::timeEllapsed(){
-	long long int tempTime;
-	//force the thread to run on CPU 0 because the QPC method is buggy
-	DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), (DWORD_PTR)1);
-	QueryPerformanceCounter((LARGE_INTEGER *)&tempTime);
-	//let it run wild and free again
-	SetThreadAffinityMask(GetCurrentThread(), oldmask);
-	if (tempTime<startTime)
-		return 0;
-	return (tempTime - startTime) / (double)this->frequency;
+double Timer::timeEllapsed()
+{
+    // long long int tempTime;
+    // //force the thread to run on CPU 0 because the QPC method is buggy
+    // DWORD_PTR oldmask = SetThreadAffinityMask(GetCurrentThread(), (DWORD_PTR)1);
+    // QueryPerformanceCounter((LARGE_INTEGER *)&tempTime);
+    // //let it run wild and free again
+    // SetThreadAffinityMask(GetCurrentThread(), oldmask);
+    // if (tempTime < startTime)
+    //     return 0;
+    struct timeval tv;
+    struct timezone tz;
+    long long int tempTime = gettimeofday(&tv, &tz);
+    return (tempTime - startTime) / 1e6; //return seconds
 }
-
-

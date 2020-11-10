@@ -105,7 +105,7 @@ private:
 	/**
 		Adding a new vertexInfo object.
 	*/
-	void addVertexInfo(VertexInfo &vi){
+	void addVertexInfo(const VertexInfo &vi){
 		vertexInstances.push_back(vi);
 	}
 };

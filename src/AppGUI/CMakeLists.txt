@@ -14,6 +14,12 @@ SubGLWindow.cpp
 tcltk.cpp
 UI.cpp
 )
-set(APP_LIBS core mathlib)
+
+FIND_LIBRARY(GLUT_LIBRARY GLUT )
+find_package(TCL REQUIRED)
+INCLUDE_DIRECTORIES(${TCL_INCLUDE_PATH} ${TK_INCLUDE_PATH})
+
+set(APP_LIBS core mathlib GLutil ${TCL_LIBRARY} ${TK_LIBRARY})
+
 add_executable(AppGUI ${APPGUI_SRC})
-target_link_libraries(AppGUI ${APP_LIBS})
+target_link_libraries(AppGUI ${APP_LIBS} ${OPENGL_LIBRARIES} glut)

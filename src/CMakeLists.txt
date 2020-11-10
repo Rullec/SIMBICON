@@ -29,8 +29,10 @@ if(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 #================subdirectory==========
-
+add_subdirectory(gsl)
+add_subdirectory(Utils)
 add_subdirectory(MathLib) 
+add_subdirectory(GLUtils) 
 add_subdirectory(ode-0.9)
 add_subdirectory(Physics)
 add_subdirectory(Core)

@@ -37,13 +37,13 @@
    is the possibility of overflow here. FIXME: Maybe this could be
    caught */
 
-#define INT(X) ((int)(X))
+// #define INT(X) ((int)(X))
 
 
 
 int gsl_blas_ddot (const gsl_vector * X, const gsl_vector * Y, double *result){
   if (X->size == Y->size){
-	  *result = ddot (&INT (X->size), X->data, &INT (X->stride), Y->data, &INT (Y->stride));
+	  *result = ddot (& (X->size), X->data, & (X->stride), Y->data, & (Y->stride));
       return GSL_SUCCESS;
     }
   else {
@@ -59,7 +59,7 @@ int gsl_blas_ddot (const gsl_vector * X, const gsl_vector * Y, double *result){
 */
 
 double gsl_blas_dnrm2 (const gsl_vector * X){
-  return dnrm2 (&INT (X->size), X->data, &INT (X->stride));
+  return dnrm2 (& (X->size), X->data, & (X->stride));
 }
 
 /**
@@ -67,7 +67,7 @@ double gsl_blas_dnrm2 (const gsl_vector * X){
 */
 int gsl_blas_dswap (gsl_vector * X, gsl_vector * Y){
   if (X->size == Y->size){
-      dswap (&INT (X->size), X->data, &INT (X->stride), Y->data, &INT (Y->stride));
+      dswap (& (X->size), X->data, & (X->stride), Y->data, & (Y->stride));
       return GSL_SUCCESS;
     }
   else{
@@ -82,7 +82,7 @@ int gsl_blas_dswap (gsl_vector * X, gsl_vector * Y){
 */
 int gsl_blas_dcopy (const gsl_vector * X, gsl_vector * Y){
   if (X->size == Y->size){
-      dcopy (&INT (X->size), X->data, &INT (X->stride), Y->data, &INT (Y->stride));
+      dcopy (& (X->size), X->data, & (X->stride), Y->data, & (Y->stride));
       return GSL_SUCCESS;
     }
   else {
@@ -111,9 +111,9 @@ gsl_blas_dgemv (CBLAS_TRANSPOSE_t TransA, double alpha, const gsl_matrix * A,
   if ((TransA == CblasNoTrans && N == X->size && M == Y->size)
       || (TransA == CblasTrans && M == X->size && N == Y->size))
     {
-      dgemv (&aTransp, &INT (N), &INT (M), &alpha, A->data,
-                   &INT (A->tda), X->data, &INT (X->stride), &beta, Y->data,
-                   &INT (Y->stride));
+      dgemv (&aTransp, & (N), & (M), &alpha, A->data,
+                   & (A->tda), X->data, & (X->stride), &beta, Y->data,
+                   & (Y->stride));
       return GSL_SUCCESS;
     }
   else
@@ -155,9 +155,9 @@ int gsl_blas_dgemm (CBLAS_TRANSPOSE_t TransA, CBLAS_TRANSPOSE_t TransB,
 
   if (M == MA && N == NB && NA == MB)   /* [MxN] = [MAxNA][MBxNB] */
     {
-	  dgemm (&bTransp, &aTransp, &INT (N), &INT (M), &INT (NA),
-                   &alpha, B->data, &INT (B->tda), A->data, &INT (A->tda), &beta,
-                   C->data, &INT (C->tda));
+	  dgemm (&bTransp, &aTransp, & (N), & (M), & (NA),
+                   &alpha, B->data, & (B->tda), A->data, & (A->tda), &beta,
+                   C->data, & (C->tda));
       return GSL_SUCCESS;
     }
   else

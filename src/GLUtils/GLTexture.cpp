@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "./gltexture.h"
+#include "./GLTexture.h"
 #include <Utils/BMPIO.h>
 #include <Utils/Image.h>
 #include <Utils/Utils.h>
