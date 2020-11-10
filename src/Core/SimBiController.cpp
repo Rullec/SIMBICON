@@ -550,7 +550,7 @@ void SimBiController::computeHipTorques(const Quaternion& qRootD, const Quaterni
 void SimBiController::updateDAndV(){
 	characterFrame = character->getHeading();
 
-	d = Vector3d(stanceFoot->getCMPosition(), character->getCOM());
+	d = Vector3d(stanceFoot->getCMPosition(), Point3d(character->getCOM()));
 	//d is now in world coord frame, so we'll represent it in the 'character frame'
 	d = characterFrame.getComplexConjugate().rotate(d);
 	//compute v in the 'character frame' as well

@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "quaternion.h"
+#include "Quaternion.h"
 #include <Utils/Utils.h>
 
 /**
@@ -121,7 +121,7 @@ Quaternion Quaternion::sphericallyInterpolateWith(const Quaternion &other, doubl
 	This method will return a quaternion that represents a rotation of angle radians around the axis provided as a parameter.
 	IT IS ASSUMED THAT THE VECTOR PASSED IN IS A UNIT VECTOR!!!
 */
-Quaternion Quaternion::getRotationQuaternion(double angle, Vector3d &axis){
+Quaternion Quaternion::getRotationQuaternion(double angle, const Vector3d &axis){
 	Quaternion result(cos(angle/2), axis * sin(angle/2));
 	result.toUnit();
 	return result;

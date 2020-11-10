@@ -91,7 +91,7 @@ bool InteractiveWorld::onMouseEvent(int eventType, int button, int mouseX, int m
 	if (Globals::drawPushInterface == 1 && button == MOUSE_LBUTTON && eventType != MOUSE_UP){
 		Vector3d input;
 		Point3d p;
-		if (bInterface == false){
+		if (bInterface == NULL){
 			tprintf("Warning: No interaction interface was created!\n");
 			return false;
 		}

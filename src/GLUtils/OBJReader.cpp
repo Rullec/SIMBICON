@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\objreader.h"
+#include "./objreader.h"
 #include <MathLib/Point3d.h>
 #include <Utils/Utils.h>
 

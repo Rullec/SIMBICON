@@ -37,12 +37,13 @@
 
 
 //this structure is used to map a rigid body to the id of its ODE counterpart
-typedef struct ODE_RB_Map_struct{
+struct ODE_RB_Map_struct{
 	dBodyID id;
 	RigidBody* rb;
-	struct ODE_RB_Map_struct(dBodyID newId, RigidBody* newRb){ this->id = newId; this->rb = newRb;}
-} ODE_RB_Map;
+	ODE_RB_Map_struct(dBodyID newId, RigidBody* newRb){ this->id = newId; this->rb = newRb;}
+} ;
 
+typedef ODE_RB_Map_struct ODE_RB_Map;
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*
  * This class is used as a wrapper that is designed to work with the Open Dynamics Engine. It uses all the rigid bodies (together with the joints) *
  * that are loaded with RBCollection, and has methods that link with ODE to simulate the physics. If a different physics engine is to be used,     *

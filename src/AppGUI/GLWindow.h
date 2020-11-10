@@ -22,7 +22,7 @@
 */
 
 #pragma once
-#include <mathLib/Quaternion.h>
+#include <MathLib/Quaternion.h>
 #include <Utils/Timer.h>
 #include <GLUtils/GLCamera.h>
 

@@ -23,9 +23,8 @@
 
 #pragma once
 
-#include <MathLib\ThreeTuple.h>
+#include <MathLib/ThreeTuple.h>
 #include <Utils/Utils.h>
-
 
 class Vector3d;
 /*=====================================================================================================================================================*
@@ -53,6 +52,8 @@ public:
 
 	Point3d(ThreeTuple &p) : ThreeTuple(p){
 	}
+	
+	Point3d(const Vector3d &p);
 
 	Point3d(const Point3d& other){
 		this->x = other.x;
@@ -66,6 +67,7 @@ public:
 		this->z = other.z;
 		return *this;
 	}
+	Point3d& operator = (const Vector3d& other);
 
 	/**
 		default destructor.

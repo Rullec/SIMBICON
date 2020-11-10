@@ -146,7 +146,7 @@ public:
 		This method will return a quaternion that represents a rotation of angle radians around the axis provided as a parameter.
 		IT IS ASSUMED THAT THE VECTOR PASSED IN IS A UNIT VECTOR!!!
 	*/
-	static Quaternion getRotationQuaternion(double angle, Vector3d &axis);
+	static Quaternion getRotationQuaternion(double angle, const Vector3d &axis);
 
 	/**
 		This method is used to rotate the vector that is passed in as a parameter by the current quaternion (which is assumed to be a 
@@ -279,7 +279,7 @@ public:
 		In the T coordinate frame, v is the same as in C, and qA is a rotation that aligns v from P to that
 		from T.
 	*/
-	void Quaternion::decomposeRotation(Quaternion* qA, Quaternion* qB, const Vector3d& vC) const;
+	void decomposeRotation(Quaternion* qA, Quaternion* qB, const Vector3d& vC) const;
 
 	/**
 		Assume that the current quaternion represents the relative orientation between two coordinate frames A and B.

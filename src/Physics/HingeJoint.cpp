@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\hingejoint.h"
+#include "./HingeJoint.h"
 #include <Utils/Utils.h>
 
 HingeJoint::HingeJoint(char* axes){

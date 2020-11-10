@@ -22,7 +22,7 @@
 */
 
 #pragma once
-#include "basecontrolframework.h"
+#include "BaseControlFramework.h"
 #include "Character.h"
 #include <Core/SimBiController.h>
 

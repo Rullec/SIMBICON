@@ -24,7 +24,7 @@
 #include <TCL/tcl.h>
 #include <TCL/tk.h>
 
-#include "utils.h"
+#include "Utils.h"
 
 
 /**

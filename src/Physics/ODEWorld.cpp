@@ -22,7 +22,7 @@
 */
 
 #include "ODEWorld.h"
-#include <Utils/utils.h>
+#include <Utils/Utils.h>
 #include <Physics/Joint.h>
 #include <Physics/HingeJoint.h>
 #include <Physics/UniversalJoint.h>
@@ -459,6 +459,7 @@ void ODEWorld::loadRBsFromFile(char* fName){
 	contact points.
 */
 void ODEWorld::processCollisions(dGeomID o1, dGeomID o2){
+	using namespace std;
     dBodyID b1, b2;
 	RigidBody *rb1, *rb2;
     b1 = dGeomGetBody(o1);

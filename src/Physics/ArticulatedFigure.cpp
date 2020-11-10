@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\articulatedfigure.h"
+#include "./ArticulatedFigure.h"
 #include <Physics/AbstractRBEngine.h>
 #include <Physics/RBUtils.h>
 #include <Utils/Utils.h>

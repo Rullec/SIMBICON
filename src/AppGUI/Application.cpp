@@ -23,7 +23,7 @@
 
 #include "Application.h"
 #include <include/GLheaders.h>
-#include <GlUtils/GLUtils.h>
+#include <GLUtils/GLUtils.h>
 #include <AppGUI/Globals.h>
 
 

@@ -28,7 +28,7 @@
 #include "Application.h"
 #include "ControllerEditor.h"
 #include "Globals.h"
-#include <include/glHeaders.h>
+#include <include/GLheaders.h>
 
 /**
  * This method is used to initialize the main window.

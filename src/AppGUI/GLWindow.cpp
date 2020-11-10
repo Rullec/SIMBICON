@@ -23,7 +23,7 @@
 
 #include "GLWindow.h"
 
-#include <include\GLHeaders.h>
+#include <include/GLheaders.h>
 #include <GLUtils/GLUtils.h>
 #include "Globals.h"
 

@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\joint.h"
+#include "./Joint.h"
 #include <Physics/RBUtils.h>
 #include <Physics/AbstractRBEngine.h>
 #include <Physics/BallInSocketJoint.h>

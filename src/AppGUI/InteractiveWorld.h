@@ -1,6 +1,6 @@
 #pragma once
 
-#include "application.h"
+#include "Application.h"
 #include <Core/SimBiConFramework.h>
 #include <GLUtils/GLTexture.h>
 #include <AppGUI/InteractionInterface.h>

@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\Collisiondetectionprimitive.h"
+#include "./CollisionDetectionPrimitive.h"
 #include <Physics/RigidBody.h>
 #include <Utils/Utils.h>
 

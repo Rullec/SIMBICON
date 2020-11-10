@@ -167,6 +167,7 @@ void PoseController::computeTorques(DynamicArray<ContactPoint> *cfs){
 	then classes extended this one are required to provide their own implementation of this simple parser
 */
 void PoseController::parseGainLine(char* line){
+	using namespace std;
 	double kp, kd, tMax, scX, scY, scZ;
 	char jName[100];
 	int jIndex;

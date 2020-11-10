@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\transformationmatrix.h"
+#include "./TransformationMatrix.h"
 #include <gsl/blas/gsl_blas.h>
 
 

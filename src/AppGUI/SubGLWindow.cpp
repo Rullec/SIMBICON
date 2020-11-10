@@ -23,7 +23,7 @@
 
 #include "SubGLWindow.h"
 
-#include <Include/glHeaders.h>
+#include <include/GLheaders.h>
 
 /**
 	Default constructor

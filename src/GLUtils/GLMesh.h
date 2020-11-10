@@ -23,11 +23,11 @@
 
 #pragma once
 
-#include <mathLib/mathLib.h>
+#include <MathLib/MathLib.h>
 #include <Utils/Utils.h>
 #include <MathLib/Point3d.h>
 #include <MathLib/TransformationMatrix.h>
-#include <Include/glHeaders.h>
+#include <include/GLheaders.h>
 
 /*=====================================================================================================================================================================*
  * This file implements the classes needed for the storage and display of simple 3d meshes. The classes are implemented in a way that promotes the use of vertex       *

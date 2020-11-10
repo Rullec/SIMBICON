@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\rbproperties.h"
+#include "./RBProperties.h"
 
 /**
 	default constructor.

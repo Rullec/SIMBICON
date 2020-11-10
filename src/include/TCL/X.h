@@ -488,7 +488,7 @@ are reserved in the protocol for errors and replies. */
 /* subwindow mode */
 
 #define ClipByChildren		0
-#define IncludeInferiors	1
+#define includeInferiors	1
 
 /* SetClipRectangles ordering */
 

@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "matrix.h"
+#include "Matrix.h"
 #include <gsl/blas/gsl_blas.h>
 #include <MathLib/Vector3d.h>
 

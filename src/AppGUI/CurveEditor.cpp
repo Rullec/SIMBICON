@@ -24,7 +24,7 @@
 #include "CurveEditor.h"
 #include "Globals.h"
 
-#include <Include/glHeaders.h>
+#include <include/GLheaders.h>
 
 #define CAN_EDIT_POSITION
 //#define CAN_EDIT_VIEW_POSITION

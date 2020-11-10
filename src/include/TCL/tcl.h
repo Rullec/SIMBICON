@@ -2299,14 +2299,14 @@ EXTERN CONST char *	Tcl_InitStubs _ANSI_ARGS_((Tcl_Interp *interp,
 
 
 /*
- * Include the public function declarations that are accessible via
+ * include the public function declarations that are accessible via
  * the stubs table.
  */
 
 #include "tclDecls.h"
 
 /*
- * Include platform specific public function declarations that are
+ * include platform specific public function declarations that are
  * accessible via the stubs table.
  */
 

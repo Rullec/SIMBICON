@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\rbstate.h"
+#include "./RBState.h"
 
 /**
 	Default constructor - populate the data members using safe values..

@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\universaljoint.h"
+#include "./UniversalJoint.h"
 #include <Utils/Utils.h>
 
 #define ANGLE_A_CONSTRAINT		1

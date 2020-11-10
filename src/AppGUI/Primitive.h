@@ -2,7 +2,7 @@
 
 #include <MathLib/Point3d.h>
 #include <MathLib/Vector3d.h>
-#include <Include/glHeaders.h>
+#include <include/GLheaders.h>
 
 #include <GLUtils/GLMesh.h>
 

@@ -23,7 +23,7 @@
 
 #pragma once
 #include <time.h>
-#include <windows.h>
+// #include <windows.h>
 /*==================================================================================================================================================================*
  |	This is a simple timer class, that can be reset at any point, and can be used to get the ellapsed time since the last reset. In windows, it will be implemented |
  |  using the methods QueryPerformanceFrequency() and QueryPerformanceCounter(). In Linux, it can be implemented using the method gettimeofday(). The timeEllapsed  |

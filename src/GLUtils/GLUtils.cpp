@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\glutils.h"
+#include "./glutils.h"
 #include <math.h>
 #include <fstream>
 #include <iostream>

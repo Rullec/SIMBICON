@@ -25,7 +25,7 @@
 
 #include <GLUtils/GLTexture.h>
 #include <Utils/Timer.h>
-#include <mathLib/Vector3d.h>
+#include <MathLib/Vector3d.h>
 
 /**
 	This class is used to display an openGL sub-window that the user can interact with by clicking on it. When a mouse event takes place,

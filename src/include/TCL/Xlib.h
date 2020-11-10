@@ -184,7 +184,7 @@ typedef struct {
 	int ts_x_origin;	/* offset for tile or stipple operations */
 	int ts_y_origin;
         Font font;	        /* default text font for text operations */
-	int subwindow_mode;     /* ClipByChildren, IncludeInferiors */
+	int subwindow_mode;     /* ClipByChildren, includeInferiors */
 	Bool graphics_exposures;/* boolean, should exposures be generated */
 	int clip_x_origin;	/* origin for clipping */
 	int clip_y_origin;

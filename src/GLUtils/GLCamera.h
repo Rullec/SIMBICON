@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include <mathLib/Vector3d.h>
-#include <mathLib/Quaternion.h>
-#include <mathLib/Point3d.h>
-#include <mathLib/TransformationMatrix.h>
+#include <MathLib/Vector3d.h>
+#include <MathLib/Quaternion.h>
+#include <MathLib/Point3d.h>
+#include <MathLib/TransformationMatrix.h>
 
 
 /**

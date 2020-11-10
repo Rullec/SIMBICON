@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\capsulecdp.h"
+#include "./CapsuleCDP.h"
 #include <GLUtils/GLUtils.h>
 #include <Physics/SphereCDP.h>
 #include <Physics/PlaneCDP.h>

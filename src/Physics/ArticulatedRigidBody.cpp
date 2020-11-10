@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "articulatedrigidbody.h"
+#include "ArticulatedRigidBody.h"
 #include <Physics/Joint.h>
 
 

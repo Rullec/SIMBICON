@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\planecdp.h"
+#include "./PlaneCDP.h"
 #include <Physics/SphereCDP.h>
 #include <Physics/CapsuleCDP.h>
 #include <Physics/RigidBody.h>

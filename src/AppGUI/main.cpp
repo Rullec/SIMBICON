@@ -24,33 +24,61 @@
 /*
  * main.cpp: The main entry of the program.
  */
-#include <windows.h>
 #include "UI.h"
 #include "tcltk.h"
+// #include <windows.h>
 
+// /**
+//  *	Entry point for the program. Note that we will not worry much about the command line arguments.
+//  */
+// int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
+// 	char *argv[] = {"Framework"};
+// 	int argc = 1;
+
+// 	if( *lpCmdLine == 'n' ) {
+// 		Globals::useShader = false;
+// 		Globals::useConsole = false;
+// 	}
+
+// 	if( *lpCmdLine == 's' ) {
+// 		Globals::useShader = true;
+// 		Globals::useConsole = false;
+// 	}
+
+// 	try{
+// 		Tk_Main(argc, argv, Tcl_AppInit);
+// 	}catch(char* msg){
+// 		logPrint("Exception: %s\n", msg);
+// 	}
+
+//     return 0;
+// }
 /**
  *	Entry point for the program. Note that we will not worry much about the command line arguments.
  */
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow){
-	char *argv[] = {"Framework"};
-	int argc = 1;
+int main()
+{
+    char *argv[] = {"Framework"};
+    int argc = 1;
 
-	if( *lpCmdLine == 'n' ) {
-		Globals::useShader = false;
-		Globals::useConsole = false;
-	}
+    // if( *lpCmdLine == 'n' ) {
+    // 	Globals::useShader = false;
+    // 	Globals::useConsole = false;
+    // }
 
-	if( *lpCmdLine == 's' ) {
-		Globals::useShader = true;
-		Globals::useConsole = false;
-	}
+    // if( *lpCmdLine == 's' ) {
+    // 	Globals::useShader = true;
+    // 	Globals::useConsole = false;
+    // }
 
+    try
+    {
+        Tk_Main(argc, argv, Tcl_AppInit);
+    }
+    catch (char *msg)
+    {
+        logPrint("Exception: %s\n", msg);
+    }
 
-	try{
-		Tk_Main(argc, argv, Tcl_AppInit);
-	}catch(char* msg){
-		logPrint("Exception: %s\n", msg);
-	}
-    
     return 0;
 }

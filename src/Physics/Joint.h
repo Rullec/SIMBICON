@@ -36,6 +36,7 @@
  * the articulated rigid bodies that they connect. Each joint will be used to link a parent body to a child body. The joints that will be considered, for now at least,  *
  * are all rotationals joints with 1, 2 or 3 degrees of freedom. The default type of joint is a Ball in Socket joint with no joint limits.                               *
  *=======================================================================================================================================================================*/
+class AbstractRBEngine;
 class Joint{
 friend class ArticulatedFigure;
 friend class ArticulatedRigidBody;

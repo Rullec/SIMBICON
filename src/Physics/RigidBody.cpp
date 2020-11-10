@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\rigidbody.h"
+#include "./RigidBody.h"
 #include <Physics/RBUtils.h>
 #include <GLUtils/OBJReader.h>
 #include <Physics/CapsuleCDP.h>

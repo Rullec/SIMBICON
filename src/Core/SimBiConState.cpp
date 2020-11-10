@@ -25,7 +25,7 @@
 #include <Utils/Utils.h>
 #include "SimGlobals.h"
 #include "SimBiController.h"
-
+using namespace std;
 /** 
 	Update this component to recenter it around the new given D and V trajectories
 */

@@ -21,7 +21,7 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include ".\vector.h"
+#include "./Vector.h"
 
 #include <gsl/blas/gsl_blas.h>
 #include <Utils/Utils.h>
