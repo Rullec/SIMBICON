@@ -32,7 +32,9 @@ ControllerEditor::ControllerEditor(void){
 	tprintf("Loading Controller Editor...\n");
 	strcpy(inputFile,  "init/input.conF");
 
+	printf("[debug] load frame work begin\n");
 	loadFramework();
+	printf("[debug] load frame work end\n");
 
 	Globals::changeCurrControlShotStr( -1 );
 	conF->getState(&conState);

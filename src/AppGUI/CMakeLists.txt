@@ -15,11 +15,8 @@ tcltk.cpp
 UI.cpp
 )
 
-FIND_LIBRARY(GLUT_LIBRARY GLUT )
-find_package(TCL REQUIRED)
-INCLUDE_DIRECTORIES(${TCL_INCLUDE_PATH} ${TK_INCLUDE_PATH})
-
+find_package(GLUT REQUIRED )
 set(APP_LIBS core mathlib GLutil ${TCL_LIBRARY} ${TK_LIBRARY})
 
 add_executable(AppGUI ${APPGUI_SRC})
-target_link_libraries(AppGUI ${APP_LIBS} ${OPENGL_LIBRARIES} glut)
+target_link_libraries(AppGUI ${APP_LIBS} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})

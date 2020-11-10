@@ -42,11 +42,22 @@ void InitMainWindow(int argc, const char **argv){
 	}
 
 	//create the GLUT window...
-
+	printf("[log] create the glut window\n");
+	
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_STENCIL);
-
+	
 	glutInitWindowPosition(0,0);
 	glutInitWindowSize(width, height);
+	{
+		printf("raw argc %d\n", argc);
+		
+		for(int i=0; i<argc; i++)
+		printf("%s \n", argv[i]);
+		int argc_tmp = 4;
+		char *argv_tmp[4] = {"launch", "ControllerEditor", "1400", "700"};
+		// glutInit(&argc_tmp, &argv_tmp);
+		glutInit(&argc_tmp, &(argv_tmp[0]));
+	}
 	glutCreateWindow("Simbicon 1.5 Controller Editing Framework");
 
 	//set up the callback methods
@@ -78,8 +89,10 @@ void processMouse(int button, int state, int x, int y){
 	int mEvent = MOUSE_UP;
 	if (button == GLUT_RIGHT_BUTTON) mButton = MOUSE_RBUTTON;
 	if (button == GLUT_MIDDLE_BUTTON) mButton = MOUSE_MBUTTON;
-	if (button == GLUT_WHEEL_DOWN) mButton = MOUSE_WHEEL_DOWN;
-	if (button == GLUT_WHEEL_UP) mButton = MOUSE_WHEEL_UP;
+
+	// Xudong 2020: freeglut do not support whell
+	// if (button == GLUT_WHEEL_DOWN) mButton = MOUSE_WHEEL_DOWN;
+	// if (button == GLUT_WHEEL_UP) mButton = MOUSE_WHEEL_UP;
 	if (state == GLUT_DOWN) mEvent = MOUSE_DOWN;
 	if (Globals::window)
 		Globals::window->onMouseEvent(mEvent, mButton, x, y);

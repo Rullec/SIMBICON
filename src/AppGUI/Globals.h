@@ -27,7 +27,7 @@
 #include <TCL/tk.h>
 #include "Application.h"
 #include "GLWindow.h"
-#include <include/glut.h>
+#include <GL/glut.h>
 
 //disable all the 'deprecated function' warnings
 #pragma warning( disable : 4996)

@@ -67,10 +67,10 @@ int main()
     // }
 
     // if( *lpCmdLine == 's' ) {
-    // 	Globals::useShader = true;
-    // 	Globals::useConsole = false;
-    // }
 
+    // }
+    Globals::useShader = true;
+    Globals::useConsole = true;
     try
     {
         Tk_Main(argc, argv, Tcl_AppInit);

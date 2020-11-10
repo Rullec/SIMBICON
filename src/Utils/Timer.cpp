@@ -53,13 +53,14 @@ void Timer::restart()
     // QueryPerformanceCounter((LARGE_INTEGER *)&this->startTime);
     // SetThreadAffinityMask(GetCurrentThread(), oldmask);
     struct timeval tv;
-    struct timezone tz;
-    startTime = gettimeofday(&tv, &tz); // microseconds, 1e6 s
+    gettimeofday(&tv, NULL); // microseconds, 1e6 s
+    startTime = (long long)(tv.tv_sec) * 1e6 + (long long)tv.tv_usec;
 }
 
 /**
 	This method returns the number of milliseconds that has ellapsed since the timer was restarted.
 */
+// #include <iostream>
 double Timer::timeEllapsed()
 {
     // long long int tempTime;
@@ -71,7 +72,9 @@ double Timer::timeEllapsed()
     // if (tempTime < startTime)
     //     return 0;
     struct timeval tv;
-    struct timezone tz;
-    long long int tempTime = gettimeofday(&tv, &tz);
+    gettimeofday(&tv, NULL); // microseconds, 1e6 s
+    long long tempTime = (long long)(tv.tv_sec) * 1e6 + (long long)tv.tv_usec;
+    // std::cout << "start time = " << startTime << " cur time = " << tempTime
+    //           << std::endl;
     return (tempTime - startTime) / 1e6; //return seconds
 }

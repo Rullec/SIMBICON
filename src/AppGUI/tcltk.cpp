@@ -295,9 +295,20 @@ int Tcl_AppInit(Tcl_Interp *interp){
 	Tcl_LinkVar(interp, "comZ",			(char *) &SimGlobals::COMOffsetZ, TCL_LINK_DOUBLE);
 
 
+	const char file[] = "init/setup.tcl";
+    int ret = Tcl_EvalFile(interp, file);
+    if (ret != TCL_OK)
+    {
+        printf("[error] tcl eval file %s, ret %d\n", file, ret);
+        fprintf(stderr, "ERROR when reading file %s: %s\n", file,
+            Tcl_GetStringResult(interp));
+        // Most convenient access for this is to run a tiny Tcl script.
+        Tcl_Eval(interp, "puts {STACK TRACE:}; puts $errorInfo; flush stdout;");
+        Tcl_Exit(ret);
+        exit(0);
+    }
 
-	Tcl_EvalFile(interp, "init/setup.tcl");
-
+	
 
 	//and start the main loop...
 	glutMainLoop();
@@ -360,7 +371,17 @@ int pipeIn (ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **
 	   Tcl_AppendResult(interp, "Usage: %s <file>");
 	   return TCL_OK;
 	 }
-	Tcl_EvalFile(interp,argv[1]);	/* read in file & interpret */
+	auto ret = Tcl_EvalFile(interp,argv[1]);	/* read in file & interpret */
+	if(ret != TCL_OK)
+	{
+		printf("[error] tcl eval file %s, ret %d\n", argv[1], ret);
+        fprintf(stderr, "ERROR when reading file %s: %s\n", argv[1],
+        Tcl_GetStringResult(interp));
+        // Most convenient access for this is to run a tiny Tcl script.
+        Tcl_Eval(interp, "puts {STACK TRACE:}; puts $errorInfo; flush stdout;");
+        Tcl_Exit(ret);
+        exit(0);
+	}
 	return TCL_OK;
 }
 
