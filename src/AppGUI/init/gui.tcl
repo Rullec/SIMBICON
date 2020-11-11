@@ -22,7 +22,7 @@ proc makeControlDialog { } {
 	frame .dialog.editionbuttons -padx 15 -pady 5
 	image create photo undo -file [file join ../data/buttons/undo.gif]
 	image create photo redo -file [file join ../data/buttons/redo.gif]
-	image create photo recordState -file [file join ../data/buttons/recS.gif]
+	image create photo recordState -file [file join ../data/buttons/recs.gif]
 	checkbutton .dialog.recordState -image recordState -anchor center -width 21 -height 21 -selectcolor SeaGreen1 -indicatoron 0 -variable toggleControlshots
 	button .dialog.undo -image undo -anchor center -width 23 -height 23 -command {controllerUndo}
 	button .dialog.redo -image redo -anchor center -width 23 -height 23 -command {controllerRedo}
@@ -135,7 +135,7 @@ image create photo start -file [file join ../data/buttons/start.gif]
 image create photo pause -file [file join ../data/buttons/pause.gif]
 image create photo step -file [file join ../data/buttons/step.gif]
 image create photo record -file [file join ../data/buttons/rec.gif]
-image create photo recordWorld -file [file join ../data/buttons/recW.gif]
+image create photo recordWorld -file [file join ../data/buttons/recw.gif]
 button .simulstart -image start -anchor center -width 23 -height 23 -command {anim start}
 button .simulpause -image pause -anchor center -width 23 -height 23 -command {anim pause}
 button .simulstep -image step -anchor center -width 23 -height 23 -command {anim step}
