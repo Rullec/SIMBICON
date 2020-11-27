@@ -29,12 +29,12 @@
  */
 ControllerEditor::ControllerEditor(void)
 {
-    tprintf("Loading Controller Editor...\n");
-    strcpy(inputFile, "init/input.conF");
+    const char default_input_file[] = "init/input.conf";
+    tprintf("Loading Controller Editor from default %s...\n",
+            default_input_file);
+    strcpy(inputFile, default_input_file);
 
-    printf("[debug] load frame work begin\n");
     loadFramework();
-    printf("[debug] load frame work end\n");
 
     Globals::changeCurrControlShotStr(-1);
     conF->getState(&conState);

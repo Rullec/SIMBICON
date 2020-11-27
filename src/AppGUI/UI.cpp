@@ -51,10 +51,10 @@ void InitMainWindow(int argc, const char **argv)
     glutInitWindowPosition(0, 0);
     glutInitWindowSize(width, height);
     {
-        printf("raw argc %d\n", argc);
+        // printf("raw argc %d\n", argc);
 
-        for (int i = 0; i < argc; i++)
-            printf("%s \n", argv[i]);
+        // for (int i = 0; i < argc; i++)
+        //     printf("%s \n", argv[i]);
         int argc_tmp = 4;
         char *argv_tmp[4] = {"launch", "ControllerEditor", "1400", "700"};
         // glutInit(&argc_tmp, &argv_tmp);
