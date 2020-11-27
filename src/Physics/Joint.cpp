@@ -161,9 +161,11 @@ void Joint::loadFromFile(FILE *f, AbstractRBEngine *world)
                            tempName);
             break;
         case RB_CPOS:
+            // joint C Pos
             sscanf(line, "%lf %lf %lf", &cJPos.x, &cJPos.y, &cJPos.z);
             break;
         case RB_PPOS:
+            // joint P Pos
             sscanf(line, "%lf %lf %lf", &pJPos.x, &pJPos.y, &pJPos.z);
             break;
         case RB_END_JOINT:
@@ -182,6 +184,7 @@ void Joint::loadFromFile(FILE *f, AbstractRBEngine *world)
             return; //and... done
             break;
         case RB_JOINT_LIMITS:
+            // joint limit
             readJointLimits(line);
             break;
         case RB_NOT_IMPORTANT:

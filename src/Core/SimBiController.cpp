@@ -414,7 +414,7 @@ RigidBody *SimBiController::getRBBySymbolicName(char *sName)
     result = character->getARBByName(resolvedName);
 
     if (result == NULL)
-        throwError("Could not find RB \'%s\\%s\'\n", resolvedName, sName);
+        throwError("Could not find RB \'%s/%s\'\n", resolvedName, sName);
 
     return result;
 }
@@ -789,7 +789,7 @@ void SimBiController::loadFromFile(char *fName)
     //have a temporary buffer used to read the file line by line...
     char buffer[200];
     //this is where it happens.
-
+    printf("[debug] begin to load controller from %s\n", fName);
     while (!feof(f))
     {
         //get a line from the file...
@@ -809,6 +809,7 @@ void SimBiController::loadFromFile(char *fName)
         case CON_STATE_START:
             tempState = new SimBiConState();
             sscanf(line, "%d", &tempStateNr);
+            printf("[debug] begin to load simbicon state %d\n", tempStateNr);
             if (tempStateNr != stateOffset + this->states.size())
                 throwError("Inccorect state offset specified: %d", tempStateNr);
             states.push_back(tempState);

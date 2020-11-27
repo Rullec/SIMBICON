@@ -38,7 +38,7 @@ void logPrint(char *format, ...)
     vsprintf(message, format, vl);
     va_end(vl);
 
-    static FILE *fp = fopen("out\\log.txt", "wt");
+    static FILE *fp = fopen("out/log.txt", "wt");
 
     fprintf(fp, "%s", message);
     fflush(fp);

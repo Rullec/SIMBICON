@@ -410,6 +410,7 @@ Quaternion Character::getHeading()
 */
 void Character::loadReducedStateFromFile(char *fName)
 {
+    printf("[debug] load character state from %s\n", fName);
     DynamicArray<double> state;
     readReducedStateFromFile(fName, &state);
     setState(&state);

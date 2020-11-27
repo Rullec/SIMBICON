@@ -239,7 +239,7 @@ void GLWindow::draw()
     {
         static int screenShotNumber = 0;
         char fName[100];
-        sprintf(fName, "..\\screenShots\\ss%05d.bmp", screenShotNumber);
+        sprintf(fName, "../screenShots/ss%05d.bmp", screenShotNumber);
         screenShotNumber++;
         GLUtils::saveScreenShot(fName, 0, 0, w, h);
     }
@@ -248,7 +248,7 @@ void GLWindow::draw()
     {
         static int worldShotNumber = 0;
         char fName[100];
-        sprintf(fName, "..\\worldShots\\ws%05d.obj", worldShotNumber);
+        sprintf(fName, "../worldShots/ws%05d.obj", worldShotNumber);
         worldShotNumber++;
         FILE *fp = fopen(fName, "w");
         fprintf(fp,

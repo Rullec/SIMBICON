@@ -27,6 +27,7 @@
 #include <Core/SimBiController.h>
 #include <Physics/ODEWorld.h>
 #include <Utils/Utils.h>
+#include <iostream>
 
 SimBiConFramework::SimBiConFramework(char *input, char *conFile)
 {
@@ -57,15 +58,20 @@ SimBiConFramework::SimBiConFramework(char *input, char *conFile)
                        "~200 characters - not allowed");
         char *line = lTrim(buffer);
         int lineType = getConLineType(line);
+        std::cout << "line type = " << lineType << std::endl;
         switch (lineType)
         {
         case LOAD_RB_FILE:
+            printf("[debug] load rigidbody/multibody from %s begin\n",
+                   trim(line));
             pw->loadRBsFromFile(trim(line));
             if (bip == NULL && pw->getAFCount() > 0)
             {
                 bip = new Character(pw->getAF(0));
                 con = new SimBiController(bip);
             }
+            printf("[debug] load rigidbody/multibody from %s succ\n",
+                   trim(line));
             break;
         case LOAD_CON_FILE:
             if (conFile != NULL)
@@ -73,7 +79,9 @@ SimBiConFramework::SimBiConFramework(char *input, char *conFile)
             if (con == NULL)
                 throwError("The physical world must contain at least one "
                            "articulated figure that can be controlled!");
+            printf("[debug] load controller from %s begin\n", line);
             con->loadFromFile(trim(line));
+            printf("[debug] load controller from %s succ\n", line);
             conLoaded = true;
             break;
         case CON_NOT_IMPORTANT:
@@ -153,6 +161,11 @@ void SimBiConFramework::getState(SimBiConFrameworkState *conFState)
 {
     conFState->worldState.clear();
     //read in the state of the world (we'll assume that the rigid bodies and the ode world are synchronized), and the controller
+    // std::cout << "[debug] world state = " << conFState->worldState << std::endl;
+    // std::cout << "[debug] world state add = " << &(conFState->worldState)
+    //           << std::endl;
+    // std::cout << "[debug] pw = " << pw << std::endl;
+    // exit(0);
     pw->getState(&(conFState->worldState));
     con->getControllerState(&(conFState->conState));
     conFState->lastFootPos = lastFootPos;

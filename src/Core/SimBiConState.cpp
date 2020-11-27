@@ -387,6 +387,7 @@ void SimBiConState::readState(FILE *f, int offset)
             //create a new trajectory, and read its information from the file
             tempTraj = new Trajectory();
             strcpy(tempTraj->jName, trim(line));
+            printf("[debug] read joint %s trajectory\n", tempTraj->jName);
             tempTraj->readTrajectory(f);
             this->sTraj.push_back(tempTraj);
             break;

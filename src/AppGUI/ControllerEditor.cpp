@@ -30,7 +30,7 @@
 ControllerEditor::ControllerEditor(void)
 {
     const char default_input_file[] = "init/input.conf";
-    tprintf("Loading Controller Editor from default %s...\n",
+    tprintf("Loading Controller Editor from default %s begin\n",
             default_input_file);
     strcpy(inputFile, default_input_file);
 
@@ -78,7 +78,7 @@ void ControllerEditor::loadFramework(int controlShot)
         else
         {
             char conFile[256];
-            sprintf(conFile, "..\\controlShots\\cs%05d.sbc", controlShot);
+            sprintf(conFile, "../controlShots/cs%05d.sbc", controlShot);
             conF = new SimBiConFramework(inputFile, conFile);
         }
 
@@ -293,9 +293,9 @@ void ControllerEditor::stepTaken()
     if (Globals::drawControlShots)
     {
         char stateFileName[100], fName[100];
-        sprintf(stateFileName, "..\\controlShots\\cs%05d.rs", nextControlShot);
+        sprintf(stateFileName, "../controlShots/cs%05d.rs", nextControlShot);
         conF->getCharacter()->saveReducedStateToFile(stateFileName);
-        sprintf(fName, "..\\controlShots\\cs%05d.sbc", nextControlShot);
+        sprintf(fName, "../controlShots/cs%05d.sbc", nextControlShot);
         conF->getController()->writeToFile(fName, stateFileName);
         Globals::changeCurrControlShotStr(nextControlShot);
         maxControlShot = nextControlShot;
@@ -418,8 +418,14 @@ void ControllerEditor::processTask()
 
                 ReducedCharacterState rNew(&newState);
 
+#ifdef _WIN32
                 conF->getCharacter()->saveReducedStateToFile(
-                    "out\\reducedCharacterState.rs", newState);
+                    "out/reducedCharacterState.rs", newState);
+#endif
+#ifdef __linux__
+                conF->getCharacter()->saveReducedStateToFile(
+                    "out/reducedCharacterState.rs", newState);
+#endif
             }
 
             //			if (conF->getController()->isBodyInContactWithTheGround()){

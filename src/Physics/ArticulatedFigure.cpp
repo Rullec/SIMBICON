@@ -126,9 +126,12 @@ void ArticulatedFigure::loadFromFile(FILE *f, AbstractRBEngine *world)
                        "~200 characters - not allowed");
         char *line = lTrim(buffer);
         int lineType = getRBLineType(line);
+
+        // first get the joint type
         switch (lineType)
         {
         case RB_ROOT:
+            // for root joint, we needs to get the root articulated link's parent joint, which we has set up before
             sscanf(line, "%s", tempName);
             if (root != NULL)
                 throwError("This articulated figure already has a root");
@@ -138,18 +141,22 @@ void ArticulatedFigure::loadFromFile(FILE *f, AbstractRBEngine *world)
                            tempName);
             break;
         case RB_JOINT_TYPE_UNIVERSAL:
+            // for universal joint : two hinge joint
             tempJoint = new UniversalJoint(line);
             tempJoint->loadFromFile(f, world);
             tempJoint->child->AFParent = this;
             tempJoint->parent->AFParent = this;
             break;
         case RB_JOINT_TYPE_HINGE:
+            // for hinge joint, revolute joint
             tempJoint = new HingeJoint(line);
             tempJoint->loadFromFile(f, world);
             tempJoint->child->AFParent = this;
             tempJoint->parent->AFParent = this;
             break;
         case RB_JOINT_TYPE_BALL_IN_SOCKET:
+            // ball in socket joint, conceptly equivalent to spherical joint
+            // but the implemention is different
             tempJoint = new BallInSocketJoint(line);
             tempJoint->loadFromFile(f, world);
             tempJoint->child->AFParent = this;
