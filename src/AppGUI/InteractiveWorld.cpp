@@ -21,47 +21,46 @@
 	If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "InteractiveWorld.h"
-#include <GLUtils/GLMesh.h>
-#include <GLUtils/OBJReader.h>
-#include <Utils/Utils.h>
 #include "Globals.h"
 #include <Core/SimBiConFramework.h>
+#include <GLUtils/GLMesh.h>
+#include <GLUtils/OBJReader.h>
 #include <Utils/Utils.h>
 
 /**
  * Constructor.
  */
-InteractiveWorld::InteractiveWorld(void){
-	bInterface = NULL;
-	world = NULL;
+InteractiveWorld::InteractiveWorld(void)
+{
+    bInterface = NULL;
+    world = NULL;
 }
 
 /**
  * Destructor.
  */
-InteractiveWorld::~InteractiveWorld(void){
-	delete bInterface;
-}
+InteractiveWorld::~InteractiveWorld(void) { delete bInterface; }
 
 /**
  * This method is used to draw extra stuff on the screen (such as items that need to be on the screen at all times)
  */
-void InteractiveWorld::drawExtras(){
-	if (Globals::drawPushInterface == 1 && bInterface)
-		bInterface->drawInterface();
+void InteractiveWorld::drawExtras()
+{
+    if (Globals::drawPushInterface == 1 && bInterface)
+        bInterface->drawInterface();
 }
 
 /**
  * This method gets called when the application gets initialized. 
  */
-void InteractiveWorld::init(){
-	Application::init();
+void InteractiveWorld::init()
+{
+    Application::init();
 
-	bInterface = new InteractionInterface("../data/textures/pushInterface.bmp", 0, 0, 128);
+    bInterface = new InteractionInterface("../data/textures/pushInterface.bmp",
+                                          0, 0, 128);
 }
-
 
 /**
  * This method is called whenever the system wants to draw the current frame to an obj file
@@ -73,54 +72,60 @@ void InteractiveWorld::init(){
  *
  * Returns the number of vertices written to the file
  */
-uint InteractiveWorld::renderToObjFile(FILE* fp, uint vertexIdxOffset) {
-	if (world)
-		return world->renderRBsToObjFile(fp, vertexIdxOffset);
-	else
-		return 0;
-
-
+uint InteractiveWorld::renderToObjFile(FILE *fp, uint vertexIdxOffset)
+{
+    if (world)
+        return world->renderRBsToObjFile(fp, vertexIdxOffset);
+    else
+        return 0;
 }
-
 
 /**
  *	This method is used when a mouse event gets generated. This method returns true if the message gets processed, false otherwise.
  */
-bool InteractiveWorld::onMouseEvent(int eventType, int button, int mouseX, int mouseY){
-	//need to figure out if the mouse is in the push interface window (and if we care)...
-	if (Globals::drawPushInterface == 1 && button == MOUSE_LBUTTON && eventType != MOUSE_UP){
-		Vector3d input;
-		Point3d p;
-		if (bInterface == NULL){
-			tprintf("Warning: No interaction interface was created!\n");
-			return false;
-		}
+bool InteractiveWorld::onMouseEvent(int eventType, int button, int mouseX,
+                                    int mouseY)
+{
+    //need to figure out if the mouse is in the push interface window (and if we care)...
+    if (Globals::drawPushInterface == 1 && button == MOUSE_LBUTTON &&
+        eventType != MOUSE_UP)
+    {
+        Vector3d input;
+        Point3d p;
+        if (bInterface == NULL)
+        {
+            tprintf("Warning: No interaction interface was created!\n");
+            return false;
+        }
 
-		if (world == NULL){
-			tprintf("Warning: There is no valid reference to a world!\n");
-			return false;
-		}
+        if (world == NULL)
+        {
+            tprintf("Warning: There is no valid reference to a world!\n");
+            return false;
+        }
 
-		RigidBody* dBall = world->getRBByName("dodgeBall");
-		if (dBall == NULL){
-			tprintf("Warning: No dodgeBall loaded!\n");
-			return false;
-		}
+        RigidBody *dBall = world->getRBByName("dodgeBall");
+        if (dBall == NULL)
+        {
+            tprintf("Warning: No dodgeBall loaded!\n");
+            return false;
+        }
 
-		bool eventHandled = bInterface->handleMouseEvent(mouseX, mouseY, &input);
-		if (eventHandled ){
-			if (input.length() > 0){
-				//get the object that we will be throwing...
-				getDodgeBallPosAndVel(-input.x, input.y, input.length(), &p, &input);
-				dBall->setCMPosition(p);
-				dBall->setCMVelocity(input);
-//				dBall->updateToWorldTransformation();
-			}
-			return true;
-		}
-	}
-	return false;
+        bool eventHandled =
+            bInterface->handleMouseEvent(mouseX, mouseY, &input);
+        if (eventHandled)
+        {
+            if (input.length() > 0)
+            {
+                //get the object that we will be throwing...
+                getDodgeBallPosAndVel(-input.x, input.y, input.length(), &p,
+                                      &input);
+                dBall->setCMPosition(p);
+                dBall->setCMVelocity(input);
+                //				dBall->updateToWorldTransformation();
+            }
+            return true;
+        }
+    }
+    return false;
 }
-
-
-

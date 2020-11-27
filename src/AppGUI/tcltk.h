@@ -26,26 +26,27 @@
  */
 #ifndef TCLTK_H
 #define TCLTK_H
-
+#include "TCL/tcl.h"
+#include "TCL/tk.h"
 /**
  * This data structure holds information that is needed
  * for a tcl console. 
 */
-typedef struct tmpConsoleInfo {
-    Tcl_Interp *consoleInterp;	// Interpreter for the console. 
-    Tcl_Interp *interp;		    // Interpreter to send console commands. 
+typedef struct tmpConsoleInfo
+{
+    Tcl_Interp *consoleInterp; // Interpreter for the console.
+    Tcl_Interp *interp;        // Interpreter to send console commands.
 } ConsoleInfo;
 
 // Performs initialization of Tcl and Tk
 int Tcl_AppInit(Tcl_Interp *interp);
 
-
 // Clear console
-int cls (ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv);
+int cls(ClientData clientData, Tcl_Interp *interp, int argc,
+        CONST84 char **argv);
 
 // Used to source input from files
-int pipeIn _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv));
-
+int pipeIn _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, int argc,
+                        CONST84 char **argv));
 
 #endif
-

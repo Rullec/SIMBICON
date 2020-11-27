@@ -23,8 +23,6 @@
 
 #pragma once
 
-
-
 #include <Core/Trajectory.h>
 
 #include "SubGLWindow.h"
@@ -32,51 +30,44 @@
 /**
   * This class is used to draw a simple curve editor in the OpenGL window.
   */
-class CurveEditor : public SubGLWindow {
+class CurveEditor : public SubGLWindow
+{
 
 protected:
+    // True if the curve editor holds the control over the mouse (after a mouse down and before the mouse up)
+    bool holdMouse;
 
-	// True if the curve editor holds the control over the mouse (after a mouse down and before the mouse up)
-	bool holdMouse;
+    // Index of the control point held by the mouse (-1 if holding the background)
+    int pointHeldIdx;
 
-	// Index of the control point held by the mouse (-1 if holding the background)
-	int pointHeldIdx;
+    // Position where background is being help, in pixel
+    int holdPosX, holdPosY;
 
-	// Position where background is being help, in pixel
-	int holdPosX, holdPosY;
-
-	// The trajectory to display and edit
-	Trajectory1D* trajectory;
-
-
+    // The trajectory to display and edit
+    Trajectory1D *trajectory;
 
 public:
-
-
-	/**
+    /**
 		Default constructor
 	*/
-	CurveEditor( int posX, int posY, int sizeX, int sizeY );
+    CurveEditor(int posX, int posY, int sizeX, int sizeY);
 
-	/**
+    /**
 		Attaches a trajectory to be edited
 		The CurveEditor doesn't own the trajectory and the caller is responsible for destroying
 		the trajectory. If the trajectory is destroyed, the editor should be notified by passing "null"
 	*/
-	void setTrajectory( Trajectory1D* trajectory );
+    void setTrajectory(Trajectory1D *trajectory);
 
-
-	/** 
+    /** 
 		Draw the curve editor in the top-left corner of the OpenGL window
 	*/
-	void draw();
+    void draw();
 
-
-	/**
+    /**
 		This method is used when a mouse event gets generated. This method returns true if the message gets processed, false otherwise.
 		The coordinates are relative to top-left (OpenGL are usually relative to bot-left)
 		Returns false if the event is not handled, true if it was handled
 	*/
-	bool onMouseEvent(int eventType, int button, int mouseX, int mouseY);
-
+    bool onMouseEvent(int eventType, int button, int mouseX, int mouseY);
 };

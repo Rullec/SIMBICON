@@ -23,40 +23,40 @@
 
 #pragma once
 
-#include <Utils/Utils.h>
 #include "Character.h"
 #include <Physics/AbstractRBEngine.h>
+#include <Utils/Utils.h>
 
 /**
 	This class is used to provide a generic interface to a controller. A controller acts on a character - it computes torques that are
 	applied to the joints of the character. The details of how the torques are computed are left up to the classes that extend this one.
 */
-class Controller{
+class Controller
+{
 protected:
-	//this is the character that the controller is acting on
-	Character* character;
-	//and this is the array of torques that will be computed in order for the character to match the desired pose - stored in world coordinates
-	DynamicArray<Vector3d> torques;
-	//this is the number of joints of the character - stored here for easy access
-	int jointCount;
-public:
-	Controller(Character* ch);
-	virtual ~Controller(void);
+    //this is the character that the controller is acting on
+    Character *character;
+    //and this is the array of torques that will be computed in order for the character to match the desired pose - stored in world coordinates
+    DynamicArray<Vector3d> torques;
+    //this is the number of joints of the character - stored here for easy access
+    int jointCount;
 
-	/**
+public:
+    Controller(Character *ch);
+    virtual ~Controller(void);
+
+    /**
 		This method is used to compute the torques, based on the current and desired poses
 	*/
-	virtual void computeTorques(DynamicArray<ContactPoint> *cfs) = 0;
+    virtual void computeTorques(DynamicArray<ContactPoint> *cfs) = 0;
 
-	/**
+    /**
 		This method is used to apply the torques that are computed to the character that is controlled.
 	*/
-	void applyTorques();
+    void applyTorques();
 
-	/**
+    /**
 		This method is used to reset the torques that are to be applied.
 	*/
-	void resetTorques();
-
-
+    void resetTorques();
 };

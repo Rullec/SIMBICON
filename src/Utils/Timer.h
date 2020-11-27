@@ -30,29 +30,30 @@
  |  method will return the time, in seconds but expressed as a double, since the timer was reset.                                                                   |
  *==================================================================================================================================================================*/
 
-class Timer{
+class Timer
+{
 private:
-	//this is the start time of the timer, in milliseconds.
-	long long int startTime;
-	//this is the frequency of the performance counter
-	long long int frequency;
+    //this is the start time of the timer, in milliseconds.
+    long long int startTime;
+    //this is the frequency of the performance counter
+    long long int frequency;
+
 public:
-	/**
+    /**
 		Default constructor - resets the timer for the first time.
 	*/
-	Timer();
-	/**
+    Timer();
+    /**
 		Default destructor - doesn't do much.
 	*/
-	~Timer();
-	/**
+    ~Timer();
+    /**
 		This method resets the starting time. All the time Ellapsed function calls will use the reset start time for their time evaluations.
 	*/
-	void restart();
-	
-	/**
+    void restart();
+
+    /**
 		This method returns the number of seconds that has ellapsed since the timer was reset.
 	*/
-	double timeEllapsed();
+    double timeEllapsed();
 };
-

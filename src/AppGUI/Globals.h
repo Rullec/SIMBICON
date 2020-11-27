@@ -23,91 +23,90 @@
 
 #pragma once
 
-#include <TCL/tcl.h>
-#include <TCL/tk.h>
 #include "Application.h"
 #include "GLWindow.h"
 #include <GL/glut.h>
+#include <TCL/tcl.h>
+#include <TCL/tk.h>
 
 //disable all the 'deprecated function' warnings
-#pragma warning( disable : 4996)
+#pragma warning(disable : 4996)
 
 /**
 	This class is used as a container for all the global variables that are needed in the system.
 */
-class Globals{
+class Globals
+{
 public:
-	//a reference to the tcl interpreter that we are using
-	static Tcl_Interp *tclInterpreter;
-	//a reference to the application that is running
-	static Application* app;
-	//a reference to the openGL window
-	static GLWindow* window;
-	//indicates whether or not the animation (i.e. simulation, play back, etc) is playing
-	static int animationRunning;
-	//gives the ratio of animation time to real time.
-	static double animationTimeToRealTimeRatio;
-	//this is the desired frame rate
-	static double desiredFrameRate;
-	//flag that controls the drawing of the FPS information
-	static int drawFPS;
-	//flag that controls the drawing of the cubeMap
-	static int drawCubeMap;
-	//flag that controls the drawing of the golbal axes
-	static int drawGlobalAxes;
-	//flag that controls the drawing of the shadows
-	static int drawShadows;
-	//flag that controls the drawing of the collision primitives
-	static int drawCollisionPrimitives;
-	//flag that controls the drawing of the ground
-	static int drawGroundPlane;
-	//flag that controls the drawing of the contact forces
-	static int drawContactForces;
-	//flag that controls the drawing of the desired pose that is being tracked
-	static int drawDesiredPose;
-	//controls the phase at which the target pose is drawn
-	static double targetPosePhase;
-	//flag that controls the drawing of the push interface
-	static int drawPushInterface;
-	//flag that controls the drawing of the curve editor
-	static int drawCurveEditor;
-	//flag that controls the drawing of the canvas
-	static int drawCanvas;
-	//flag that controls the camera tracking
-	static int followCharacter;
-	//flag that controls the joint position display
-	static int drawJoints;
-	//flag that controls the drawing of screenshots
-	static int drawScreenShots;
-	//flag that controls the capturing of the 3D world in OBJ files
-	static int drawWorldShots;
-	//flag that controls the capturing of the controller
-	static int drawControlShots;
-	//a text variable to display the current control shot displayed
-	static char* currControlShotStr;
-	//flat that indicates if the controller D and V trajectories should be updated on next step
-	static int updateDVTraj;
-	//indicates wether or not to use shaders
-	static bool useShader;
-	//indicates wether or not to use the console
-	static bool useConsole;
+    //a reference to the tcl interpreter that we are using
+    static Tcl_Interp *tclInterpreter;
+    //a reference to the application that is running
+    static Application *app;
+    //a reference to the openGL window
+    static GLWindow *window;
+    //indicates whether or not the animation (i.e. simulation, play back, etc) is playing
+    static int animationRunning;
+    //gives the ratio of animation time to real time.
+    static double animationTimeToRealTimeRatio;
+    //this is the desired frame rate
+    static double desiredFrameRate;
+    //flag that controls the drawing of the FPS information
+    static int drawFPS;
+    //flag that controls the drawing of the cubeMap
+    static int drawCubeMap;
+    //flag that controls the drawing of the golbal axes
+    static int drawGlobalAxes;
+    //flag that controls the drawing of the shadows
+    static int drawShadows;
+    //flag that controls the drawing of the collision primitives
+    static int drawCollisionPrimitives;
+    //flag that controls the drawing of the ground
+    static int drawGroundPlane;
+    //flag that controls the drawing of the contact forces
+    static int drawContactForces;
+    //flag that controls the drawing of the desired pose that is being tracked
+    static int drawDesiredPose;
+    //controls the phase at which the target pose is drawn
+    static double targetPosePhase;
+    //flag that controls the drawing of the push interface
+    static int drawPushInterface;
+    //flag that controls the drawing of the curve editor
+    static int drawCurveEditor;
+    //flag that controls the drawing of the canvas
+    static int drawCanvas;
+    //flag that controls the camera tracking
+    static int followCharacter;
+    //flag that controls the joint position display
+    static int drawJoints;
+    //flag that controls the drawing of screenshots
+    static int drawScreenShots;
+    //flag that controls the capturing of the 3D world in OBJ files
+    static int drawWorldShots;
+    //flag that controls the capturing of the controller
+    static int drawControlShots;
+    //a text variable to display the current control shot displayed
+    static char *currControlShotStr;
+    //flat that indicates if the controller D and V trajectories should be updated on next step
+    static int updateDVTraj;
+    //indicates wether or not to use shaders
+    static bool useShader;
+    //indicates wether or not to use the console
+    static bool useConsole;
 
-	//these params define the ground plane - for drawing purposes only
-	static double a, b, c, d;
+    //these params define the ground plane - for drawing purposes only
+    static double a, b, c, d;
 
-	Globals(void);
-	~Globals(void);
+    Globals(void);
+    ~Globals(void);
 
-	static void changeCurrControlShotStr( int currControlShot );
+    static void changeCurrControlShotStr(int currControlShot);
 };
-
 
 //print in an openGL window. The raster position needs to be already defined.
 void gprintf(const char *format, ...);
 
 //print in an openGL window with a large font. The raster position needs to be already defined.
 void glargeprintf(const char *format, ...);
-
 
 //and some function prototypes
 int tprintf(const char *format, ...);
@@ -116,7 +115,6 @@ int tprintf(const char *format, ...);
 #define STRLEN 200
 #define MAX_LINE 255
 typedef char STR[STRLEN];
-
 
 #define MOUSE_LBUTTON 1
 #define MOUSE_RBUTTON 2
@@ -128,5 +126,3 @@ typedef char STR[STRLEN];
 #define MOUSE_DRAG 2
 #define MOUSE_UP 3
 #define MOUSE_MOVE 4
-
-

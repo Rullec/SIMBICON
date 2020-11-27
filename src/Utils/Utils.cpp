@@ -26,17 +26,17 @@
 
 #include "Utils.h"
 
-
 /**
  * Output the message to a file...
  */
-void logPrint(char *format, ...){
+void logPrint(char *format, ...)
+{
     static char message[1024];
     va_list vl;
 
-	va_start(vl, format);   
-	vsprintf(message, format, vl);
-	va_end(vl);
+    va_start(vl, format);
+    vsprintf(message, format, vl);
+    va_end(vl);
 
     static FILE *fp = fopen("out\\log.txt", "wt");
 
@@ -44,36 +44,36 @@ void logPrint(char *format, ...){
     fflush(fp);
 }
 
-
 /**
 	Converts a list of strings to a unique TCL string list
 	The string is allocated using Tcl_Alloc, so it should be managed by TCL from now on
 	Pass true to "enQuote" to put extra quotes around the generated string
 */
-char* stringListToTclList( DynamicArray<const char*> stringList, bool enQuote ) {
+char *stringListToTclList(DynamicArray<const char *> stringList, bool enQuote)
+{
 
-	uint storageSize = 1;  // For terminating null
-	if( enQuote ) storageSize = 3; // For "\""  and  "\"" and terminating null
+    uint storageSize = 1; // For terminating null
+    if (enQuote)
+        storageSize = 3; // For "\""  and  "\"" and terminating null
 
-	for( uint i=0; i < stringList.size(); ++i )
-		storageSize += 3 + strlen( stringList[i] );  // For "{string} "
+    for (uint i = 0; i < stringList.size(); ++i)
+        storageSize += 3 + strlen(stringList[i]); // For "{string} "
 
-	char* buffer = Tcl_Alloc( storageSize );
-	int bufferIdx = 0;
-	if( enQuote ) buffer[bufferIdx++] = '\"';
-	for( uint i=0; i < stringList.size(); ++i ) {
-		buffer[bufferIdx++] = '{';
-		strcpy( buffer+bufferIdx, stringList[i] );
-		bufferIdx += strlen(stringList[i]);
-		buffer[bufferIdx++] = '}';
-		buffer[bufferIdx++] = ' ';
-	}
-	if( enQuote ) buffer[bufferIdx++] = '\"';
-	buffer[bufferIdx++] = 0;
+    char *buffer = Tcl_Alloc(storageSize);
+    int bufferIdx = 0;
+    if (enQuote)
+        buffer[bufferIdx++] = '\"';
+    for (uint i = 0; i < stringList.size(); ++i)
+    {
+        buffer[bufferIdx++] = '{';
+        strcpy(buffer + bufferIdx, stringList[i]);
+        bufferIdx += strlen(stringList[i]);
+        buffer[bufferIdx++] = '}';
+        buffer[bufferIdx++] = ' ';
+    }
+    if (enQuote)
+        buffer[bufferIdx++] = '\"';
+    buffer[bufferIdx++] = 0;
 
-	return buffer;
-
+    return buffer;
 }
-
-
-

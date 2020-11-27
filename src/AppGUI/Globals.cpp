@@ -25,8 +25,8 @@
 
 //initialize the static variables to some sensible values
 Tcl_Interp *Globals::tclInterpreter = NULL;
-Application* Globals::app = NULL;
-GLWindow* Globals::window = NULL;
+Application *Globals::app = NULL;
+GLWindow *Globals::window = NULL;
 int Globals::animationRunning = 0;
 double Globals::animationTimeToRealTimeRatio = 1;
 double Globals::desiredFrameRate = 30;
@@ -50,72 +50,64 @@ int Globals::drawScreenShots = 0;
 int Globals::drawWorldShots = 0;
 int Globals::drawControlShots = 0;
 int Globals::updateDVTraj = 0;
-char* Globals::currControlShotStr = NULL;
+char *Globals::currControlShotStr = NULL;
 bool Globals::useShader = true;
 bool Globals::useConsole = true;
 
-double Globals::a=0, Globals::b=1, Globals::c=0, Globals::d=0;
+double Globals::a = 0, Globals::b = 1, Globals::c = 0, Globals::d = 0;
 
-Globals::Globals(void){
+Globals::Globals(void) {}
+
+Globals::~Globals(void) {}
+
+void Globals::changeCurrControlShotStr(int currControlShot)
+{
+    if (currControlShotStr == NULL)
+        currControlShotStr = Tcl_Alloc(100);
+    if (currControlShot < 0)
+        strcpy(currControlShotStr, "Initial");
+    else
+        sprintf(currControlShotStr, "%05d", currControlShot);
+
+    Tcl_UpdateLinkedVar(Globals::tclInterpreter, "currControlShot");
 }
-
-Globals::~Globals(void){
-
-}
-
-
-void Globals::changeCurrControlShotStr( int currControlShot ) {
-	if( currControlShotStr == NULL )
-			currControlShotStr = Tcl_Alloc( 100 );
-	if( currControlShot < 0 )
-		strcpy( currControlShotStr, "Initial" );
-	else
-		sprintf( currControlShotStr, "%05d", currControlShot );
-	
-	Tcl_UpdateLinkedVar( Globals::tclInterpreter, "currControlShot" );
-}
-
 
 //print in an openGL window. The raster position needs to be already defined.
-void gprintf(const char *fmt, ...){
-	char		text[256];								// Holds Our String
-	va_list		ap;										// Pointer To List Of Arguments
+void gprintf(const char *fmt, ...)
+{
+    char text[256]; // Holds Our String
+    va_list ap;     // Pointer To List Of Arguments
 
-	if (fmt == NULL)									// If There's No Text
-		return;											// Do Nothing
+    if (fmt == NULL) // If There's No Text
+        return;      // Do Nothing
 
-	va_start(ap, fmt);									// Parses The String For Variables
-	    vsprintf(text, fmt, ap);						// And Converts Symbols To Actual Numbers
-	va_end(ap);											// Results Are Stored In Text
+    va_start(ap, fmt);       // Parses The String For Variables
+    vsprintf(text, fmt, ap); // And Converts Symbols To Actual Numbers
+    va_end(ap);              // Results Are Stored In Text
 
-	glDisable(GL_DEPTH_TEST);
-	int len = (int) strlen(text);
-	for (int i = 0; i < len; i++)
-		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, text[i]);
-	glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+    int len = (int)strlen(text);
+    for (int i = 0; i < len; i++)
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, text[i]);
+    glEnable(GL_DEPTH_TEST);
 }
-
-
 
 //print in an openGL window with a large font. The raster position needs to be already defined.
-void glargeprintf(const char *fmt, ...){
-	char		text[256];								// Holds Our String
-	va_list		ap;										// Pointer To List Of Arguments
+void glargeprintf(const char *fmt, ...)
+{
+    char text[256]; // Holds Our String
+    va_list ap;     // Pointer To List Of Arguments
 
-	if (fmt == NULL)									// If There's No Text
-		return;											// Do Nothing
+    if (fmt == NULL) // If There's No Text
+        return;      // Do Nothing
 
-	va_start(ap, fmt);									// Parses The String For Variables
-	    vsprintf(text, fmt, ap);						// And Converts Symbols To Actual Numbers
-	va_end(ap);											// Results Are Stored In Text
+    va_start(ap, fmt);       // Parses The String For Variables
+    vsprintf(text, fmt, ap); // And Converts Symbols To Actual Numbers
+    va_end(ap);              // Results Are Stored In Text
 
-	glDisable(GL_DEPTH_TEST);
-	int len = (int) strlen(text);
-	for (int i = 0; i < len; i++)
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text[i]);
-	glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+    int len = (int)strlen(text);
+    for (int i = 0; i < len; i++)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text[i]);
+    glEnable(GL_DEPTH_TEST);
 }
-
-
-
-

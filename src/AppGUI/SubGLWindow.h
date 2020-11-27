@@ -23,94 +23,84 @@
 
 #pragma once
 
-
 /**
   * Used for any sub window that needs to be displayed in the OpenGL window
   */
-class SubGLWindow {
+class SubGLWindow
+{
 
 protected:
-	
-	// Define the editor interface size
-	int editorPosX;   // Relative to LEFT side of the window (in pixel)
-	int editorPosY;   // Relative to TOP side of the window (in pixel)
-	int editorSizeX;  // (in pixel)
-	int editorSizeY;  // (in pixel)
+    // Define the editor interface size
+    int editorPosX;  // Relative to LEFT side of the window (in pixel)
+    int editorPosY;  // Relative to TOP side of the window (in pixel)
+    int editorSizeX; // (in pixel)
+    int editorSizeY; // (in pixel)
 
-	double minX; // The minimum X value of the viewport (in unit)
-	double minY; // The minimum Y value of the viewport (in unit)
-	double maxX; // The maximum X value of the viewport (in unit)
-	double maxY; // The maximum Y value of the viewport (in unit)
+    double minX; // The minimum X value of the viewport (in unit)
+    double minY; // The minimum Y value of the viewport (in unit)
+    double maxX; // The maximum X value of the viewport (in unit)
+    double maxY; // The maximum Y value of the viewport (in unit)
 
 private:
-
-	// Used to save current viewport settings to restore state at the end
-	int viewportSettings[4];
+    // Used to save current viewport settings to restore state at the end
+    int viewportSettings[4];
 
 protected:
-
-	/**
+    /**
 		Converts from the mouse X position to the viewport pixel position
 	*/
-	int mouseXToPixel( int mouseX );
+    int mouseXToPixel(int mouseX);
 
-	/**
+    /**
 		Converts from the mouse Y position to the viewport pixel position
 	*/
-	int mouseYToPixel( int mouseY );
+    int mouseYToPixel(int mouseY);
 
-	/**
+    /**
 		Converts from a viewport X position to a pixel position
 	*/
-	double viewportXToPixel( double x );
+    double viewportXToPixel(double x);
 
-	/**
+    /**
 		Converts from a viewport Y position to a pixel position
 	*/
-	double viewportYToPixel( double y );
+    double viewportYToPixel(double y);
 
-	/**
+    /**
 		Converts from a pixel vector X position to a viewport vector
 	*/
-	double pixelVecXToViewport( int vecX );
+    double pixelVecXToViewport(int vecX);
 
-	/**
+    /**
 		Converts from a pixel X position to a viewport position
 	*/
-	double pixelXToViewport( int posX );
+    double pixelXToViewport(int posX);
 
-	/**
+    /**
 		Converts from a pixel vector Y position to a viewport vector
 	*/
-	double pixelVecYToViewport( int vecY );
+    double pixelVecYToViewport(int vecY);
 
-	/**
+    /**
 		Converts from a pixel Y position to a viewport position
 	*/
-	double pixelYToViewport( int posY );
+    double pixelYToViewport(int posY);
 
-
-	/**
+    /**
 		What needs to be done before the subwindow is drawn into
 	*/
-	void preDraw();
+    void preDraw();
 
-	/**
+    /**
 		What needs to be done after the subwindow is drawn into
 	*/
-	void postDraw();
-
-
+    void postDraw();
 
 public:
-
-
-	/**
+    /**
 		Default constructor
 	*/
-	SubGLWindow( int posX, int posY, int sizeX, int sizeY );
+    SubGLWindow(int posX, int posY, int sizeX, int sizeY);
 
-
-	virtual void draw() = 0;
-
+    virtual void draw() = 0;
 };

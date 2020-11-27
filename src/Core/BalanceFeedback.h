@@ -24,7 +24,6 @@
 #pragma once
 #include <MathLib/Vector3d.h>
 
-
 class SimBiController;
 class Joint;
 
@@ -32,61 +31,70 @@ class Joint;
 	This generic class provides an interface for classes that provide balance feedback for controllers for physically simulated characters.
 */
 
-class BalanceFeedback{
+class BalanceFeedback
+{
 public:
-	BalanceFeedback(void);
-	virtual ~BalanceFeedback(void);
-	/**
+    BalanceFeedback(void);
+    virtual ~BalanceFeedback(void);
+    /**
 		This method returns a scalar that is the ammount of feedback that needs to be added to a trajectory. It is a function of the
 		phase in the controller's state (between 0 and 1), the vector between the stance foot and the center of mass, and the velocity of
 		the center of mass.
 	*/
-	virtual double getFeedbackContribution(SimBiController* con, Joint* j, double phi, Vector3d d, Vector3d v) = 0;
-	virtual void writeToFile(FILE* fp) = 0;
-	virtual void loadFromFile(FILE* fp) = 0;
+    virtual double getFeedbackContribution(SimBiController *con, Joint *j,
+                                           double phi, Vector3d d,
+                                           Vector3d v) = 0;
+    virtual void writeToFile(FILE *fp) = 0;
+    virtual void loadFromFile(FILE *fp) = 0;
 };
 
 /**
 	This class applies feedback that is linear in d and v - i.e. the original simbicon feedback formulation
 */
-class LinearBalanceFeedback : public BalanceFeedback{
+class LinearBalanceFeedback : public BalanceFeedback
+{
 public:
-	//This vector, dotted with d or v, gives the quantities that should be used in the feedback formula
-	Vector3d feedbackProjectionAxis;
-	//these are the two feedback gains
-	double cd;
-	double cv;
+    //This vector, dotted with d or v, gives the quantities that should be used in the feedback formula
+    Vector3d feedbackProjectionAxis;
+    //these are the two feedback gains
+    double cd;
+    double cv;
 
-	double vMin, vMax, dMin, dMax;
+    double vMin, vMax, dMin, dMax;
+
 public:
-	LinearBalanceFeedback(){
-		feedbackProjectionAxis = Vector3d();
-		cd = cv = 0;
-		vMin = dMin = -1000;
-		vMax = dMax = 1000;
-	}
+    LinearBalanceFeedback()
+    {
+        feedbackProjectionAxis = Vector3d();
+        cd = cv = 0;
+        vMin = dMin = -1000;
+        vMax = dMax = 1000;
+    }
 
-	virtual ~LinearBalanceFeedback(){
+    virtual ~LinearBalanceFeedback() {}
 
-	}
-
-	/**
+    /**
 		This method returns a scalar that is the ammount of feedback that needs to be added to a trajectory. It is a function of the
 		phase in the controller's state (between 0 and 1), the vector between the stance foot and the center of mass, and the velocity of
 		the center of mass.
 	*/
-	virtual double getFeedbackContribution(SimBiController* con, Joint* j, double phi, Vector3d d, Vector3d v){
-		double dToUse = d.dotProductWith(feedbackProjectionAxis);
-		double vToUse = v.dotProductWith(feedbackProjectionAxis);
-		if (dToUse < dMin) dToUse = dMin;
-		if (vToUse < vMin) vToUse = vMin;
-		if (dToUse > dMax) dToUse = dMax;
-		if (vToUse > vMax) vToUse = vMax;
+    virtual double getFeedbackContribution(SimBiController *con, Joint *j,
+                                           double phi, Vector3d d, Vector3d v)
+    {
+        double dToUse = d.dotProductWith(feedbackProjectionAxis);
+        double vToUse = v.dotProductWith(feedbackProjectionAxis);
+        if (dToUse < dMin)
+            dToUse = dMin;
+        if (vToUse < vMin)
+            vToUse = vMin;
+        if (dToUse > dMax)
+            dToUse = dMax;
+        if (vToUse > vMax)
+            vToUse = vMax;
 
-		return dToUse * cd + vToUse * cv;
-	}
+        return dToUse * cd + vToUse * cv;
+    }
 
-	virtual void writeToFile(FILE* fp);
-	virtual void loadFromFile(FILE* fp);
+    virtual void writeToFile(FILE *fp);
+    virtual void loadFromFile(FILE *fp);
 };
-

@@ -30,15 +30,13 @@ double SimGlobals::gravity = -9.8;
 Vector3d SimGlobals::up = Vector3d(0, 1, 0);
 int SimGlobals::forceHeadingControl = 1;
 double SimGlobals::desiredHeading = 0;
-double SimGlobals::dt = 1.0/(2000.0);
-AbstractRBEngine* SimGlobals::activeRbEngine = NULL;
+double SimGlobals::dt = 1.0 / (2000.0);
+AbstractRBEngine *SimGlobals::activeRbEngine = NULL;
 
 double SimGlobals::conInterpolationValue;
 double SimGlobals::bipDesiredVelocity;
 
-
 double SimGlobals::targetPos = 0;
-
 
 double SimGlobals::targetPosX = 0;
 double SimGlobals::targetPosZ = 0;
@@ -46,7 +44,6 @@ double SimGlobals::targetPosZ = 0;
 int SimGlobals::constraintSoftness = 1;
 int SimGlobals::CGIterCount = 0;
 int SimGlobals::linearizationCount = 1;
-
 
 double SimGlobals::rootSagittal = 0;
 double SimGlobals::rootLateral = 0;

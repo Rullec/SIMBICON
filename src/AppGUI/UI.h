@@ -31,23 +31,28 @@
 #include "Globals.h"
 
 // Quit the application
-int quit (ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv);
-
+int quit(ClientData clientData, Tcl_Interp *interp, int argc,
+         CONST84 char **argv);
 
 // Start/Pause/Restart the animation
-int animate _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv));
+int animate _ANSI_ARGS_((ClientData clientData, Tcl_Interp *interp, int argc,
+                         CONST84 char **argv));
 
 // Launch the animation
-int launch (ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv);
+int launch(ClientData clientData, Tcl_Interp *interp, int argc,
+           CONST84 char **argv);
 
 // control the camera orientation
-int camera (ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv);
+int camera(ClientData clientData, Tcl_Interp *interp, int argc,
+           CONST84 char **argv);
 
 //this method is used to manipulate the state of the animation
-int animation (ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv);
+int animation(ClientData clientData, Tcl_Interp *interp, int argc,
+              CONST84 char **argv);
 
 // control the camera orientation
-int instantChar (ClientData clientData, Tcl_Interp *interp, int argc, CONST84 char **argv);
+int instantChar(ClientData clientData, Tcl_Interp *interp, int argc,
+                CONST84 char **argv);
 
 /**
  *	This method is responsible with initiating the work that needs to be done before one new frame is drawn. 
@@ -73,7 +78,6 @@ void processMouse(int button, int state, int x, int y);
 	This is the callback method for mouse (drag) events
 */
 void processMouseActiveMotion(int x, int y);
-
 
 /**
 	This is the callback method for keyboard events

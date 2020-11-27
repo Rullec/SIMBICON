@@ -23,49 +23,45 @@
 
 #pragma once
 
+#include "Character.h"
 #include <Physics/AbstractRBEngine.h>
-#include "Character.h"
-#include "Character.h"
 #include <Utils/Utils.h>
 
-
-class BaseControlFramework{
+class BaseControlFramework
+{
 public:
-	//this is the physical world that contains all the objects inside.
-	AbstractRBEngine* pw;
-	//this is the character that we want to control (we can easily have more than one if we wanted to).
-	Character* bip;
+    //this is the physical world that contains all the objects inside.
+    AbstractRBEngine *pw;
+    //this is the character that we want to control (we can easily have more than one if we wanted to).
+    Character *bip;
 
 public:
-	/**
+    /**
 		Default constructor
 	*/
-	BaseControlFramework(void);
+    BaseControlFramework(void);
 
-	/**
+    /**
 		destructor
 	*/
-	virtual ~BaseControlFramework(void);
+    virtual ~BaseControlFramework(void);
 
-	/**
+    /**
 		returns a reference to the physical world
 	*/
-	AbstractRBEngine* getWorld(){
-		return pw;
-	}
+    AbstractRBEngine *getWorld() { return pw; }
 
-	/**
+    /**
 		this method is used to advance the simulation. Typically, we will first compute the control, and then we will take one
 		simulation step. If we are to apply control at this point in the simulation, we can either use a controller to recompute it,
 		or we can use the values that were set before.
 	*/
-	virtual bool advanceInTime(double dt, bool applyControl = true, bool recomputeTorques = true, bool advanceWorldInTime = true) = 0;
+    virtual bool advanceInTime(double dt, bool applyControl = true,
+                               bool recomputeTorques = true,
+                               bool advanceWorldInTime = true) = 0;
 
-	/**
+    /**
 		this method is used to return a reference to the character 
 	*/
-	inline Character* getCharacter(){
-		return bip;
-	}
-
+    inline Character *getCharacter() { return bip; }
 };

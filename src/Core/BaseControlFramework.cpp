@@ -27,17 +27,18 @@
 /**
 	Default constructor
 */
-BaseControlFramework::BaseControlFramework(void){
-	pw = NULL;
-	bip = NULL;
+BaseControlFramework::BaseControlFramework(void)
+{
+    pw = NULL;
+    bip = NULL;
 }
 
 /**
 	destructor
 */
-BaseControlFramework::~BaseControlFramework(void){
-	delete bip;
-	delete pw;
-	SimGlobals::activeRbEngine = NULL;
+BaseControlFramework::~BaseControlFramework(void)
+{
+    delete bip;
+    delete pw;
+    SimGlobals::activeRbEngine = NULL;
 }
-

@@ -23,32 +23,34 @@
 
 #pragma once
 
-#include <MathLib/Vector3d.h>
 #include <GLUtils/GLTexture.h>
+#include <MathLib/Vector3d.h>
 
 /**
  * This is the class that is responsible with implementing the details of what the program does.
  */
-class Application{
+class Application
+{
 private:
-	//this is the texture used for the ground
-	GLTexture *groundTexture;
+    //this is the texture used for the ground
+    GLTexture *groundTexture;
+
 public:
-	/**
+    /**
 	 * Constructor.
 	 */
-	Application(void);
-	/**
+    Application(void);
+    /**
 	 * Destructor.
 	 */
-	~Application(void);
+    ~Application(void);
 
-	/**
+    /**
 	 * This method is called whenever the window gets redrawn.
 	 */
-	virtual void draw(bool shadow = false);
+    virtual void draw(bool shadow = false);
 
-	/**
+    /**
 	 * This method is called whenever the system wants to draw the current frame to an obj file
 	 * The file is already opened and the header is written, the application should only output
 	 * vertices and faces
@@ -58,66 +60,63 @@ public:
 	 *
 	 * Returns the number of vertices written to the file
 	 */
-	virtual uint renderToObjFile(FILE* fp, uint vertexIdxOffset);
+    virtual uint renderToObjFile(FILE *fp, uint vertexIdxOffset);
 
-	/**
+    /**
 	 * This metod is used to draw the ground. We need to separate it from the main drawing method because of the shadows.
 	 */
-	virtual void drawGround();
+    virtual void drawGround();
 
-	/**
+    /**
 	 * This method is used to return the normal to the ground. I don't know what should happen if the ground isn't flat... 
 	 * only used for shadow drawing!
 	 */
-	virtual Vector3d getGroundNormal();
+    virtual Vector3d getGroundNormal();
 
-	/**
+    /**
 	 * This method gets called when the application gets initialized. 
 	 */
-	virtual void init();
+    virtual void init();
 
-
-	/**
+    /**
 	 * This method is used to restart the application.
 	 */
-	virtual void restart();
+    virtual void restart();
 
-	/**
+    /**
 	 * This method is used to reload the application.
 	 */
-	virtual void reload();
+    virtual void reload();
 
-	/**
+    /**
 	 * This method returns the target that the camera should be looking at
 	 */
-	virtual Point3d getCameraTarget();
+    virtual Point3d getCameraTarget();
 
-	/**
+    /**
      *	This method is used when a mouse event gets generated. This method returns true if the message gets processed, false otherwise.
 	 */
-	virtual bool onMouseEvent(int eventType, int button, int mouseX, int mouseY);
+    virtual bool onMouseEvent(int eventType, int button, int mouseX,
+                              int mouseY);
 
-	/**
+    /**
 	 *  This method is used when a keyboard event gets generated. This method returns true if the message gets processed, false otherwise.
 	 */
-	virtual bool onKeyEvent(int key);
+    virtual bool onKeyEvent(int key);
 
-	/**
+    /**
 	 * This method is used to draw extra stuff on the screen (such as items that need to be on the screen at all times)
 	 */
-	virtual void drawExtras(){
-	}
+    virtual void drawExtras() {}
 
-	/**
+    /**
 	 * This method will get called on idle. This method should be responsible with doing the work that the application needs to do 
 	 * (i.e. run simulations, and so on).
 	 */
-	virtual void processTask();
+    virtual void processTask();
 
-	/**
+    /**
 	 * Registers TCL functions specific to this application
 	 */
-	void registerTclFunctions();
-
+    void registerTclFunctions();
 };
-

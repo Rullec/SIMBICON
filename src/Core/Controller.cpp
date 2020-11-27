@@ -26,33 +26,33 @@
 /**
 	Default constructor.
 */
-Controller::Controller(Character* ch){
-	this->character = ch;
-	jointCount = ch->getJointCount();
+Controller::Controller(Character *ch)
+{
+    this->character = ch;
+    jointCount = ch->getJointCount();
 }
 
 /**
 	Default destructor.
 */
-Controller::~Controller(void){
-}
-
+Controller::~Controller(void) {}
 
 /**
 	This method is used to apply the torques that are computed to the character that is controlled.
 */
-void Controller::applyTorques(){
-	for (int i=0;i<jointCount;i++){
-		character->getJoint(i)->setTorque(torques[i]);
-	}
+void Controller::applyTorques()
+{
+    for (int i = 0; i < jointCount; i++)
+    {
+        character->getJoint(i)->setTorque(torques[i]);
+    }
 }
 
 /**
 	This method is used to reset the torques that are to be applied.
 */
-void Controller::resetTorques(){
-	for (int i=0;i<jointCount;i++)
-		torques[i] = Vector3d(0,0,0);
+void Controller::resetTorques()
+{
+    for (int i = 0; i < jointCount; i++)
+        torques[i] = Vector3d(0, 0, 0);
 }
-
-

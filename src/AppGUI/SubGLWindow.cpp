@@ -28,113 +28,116 @@
 /**
 	Default constructor
 */
-SubGLWindow::SubGLWindow( int posX, int posY, int sizeX, int sizeY ) {
-	editorPosX = posX;
-	editorPosY = posY;
-	editorSizeX = sizeX;
-	editorSizeY = sizeY;
+SubGLWindow::SubGLWindow(int posX, int posY, int sizeX, int sizeY)
+{
+    editorPosX = posX;
+    editorPosY = posY;
+    editorSizeX = sizeX;
+    editorSizeY = sizeY;
 
-	minX = 0;
-	maxX = (double)sizeX/sizeY;
-	minY = 0;
-	maxY = 1;
+    minX = 0;
+    maxX = (double)sizeX / sizeY;
+    minY = 0;
+    maxY = 1;
 }
-
 
 // NOTE: Viewport origin is bottom-left of the viewport (for pixels, pos and val)
 //       Mouse origin is top-left of the containing window
 
-int SubGLWindow::mouseXToPixel( int mouseX ) {
-	return mouseX - editorPosX;
-}
+int SubGLWindow::mouseXToPixel(int mouseX) { return mouseX - editorPosX; }
 
 /**
 	Converts from the mouse Y position to the viewport pixel position
 */
-int SubGLWindow::mouseYToPixel( int mouseY ) {
-	return editorSizeY - (mouseY - editorPosY) - 1;
+int SubGLWindow::mouseYToPixel(int mouseY)
+{
+    return editorSizeY - (mouseY - editorPosY) - 1;
 }
 
-
-double SubGLWindow::viewportXToPixel( double x ) {
-	return (x - minX) * (editorSizeX-1) / (maxX-minX);
+double SubGLWindow::viewportXToPixel(double x)
+{
+    return (x - minX) * (editorSizeX - 1) / (maxX - minX);
 }
 
-double SubGLWindow::viewportYToPixel( double y ) {
-	return (y - minY) * (editorSizeY-1) / (maxY-minY);
+double SubGLWindow::viewportYToPixel(double y)
+{
+    return (y - minY) * (editorSizeY - 1) / (maxY - minY);
 }
 
-double SubGLWindow::pixelVecXToViewport( int vecX ) {
-	return vecX*(maxX-minX) / (double)(editorSizeX-1);
+double SubGLWindow::pixelVecXToViewport(int vecX)
+{
+    return vecX * (maxX - minX) / (double)(editorSizeX - 1);
 }
 
-double SubGLWindow::pixelXToViewport( int posX ) {
-	return minX + pixelVecXToViewport(posX);
+double SubGLWindow::pixelXToViewport(int posX)
+{
+    return minX + pixelVecXToViewport(posX);
 }
 
-double SubGLWindow::pixelVecYToViewport( int vecY ) {
-	return vecY*(maxY-minY) / (double)(editorSizeY-1);
+double SubGLWindow::pixelVecYToViewport(int vecY)
+{
+    return vecY * (maxY - minY) / (double)(editorSizeY - 1);
 }
 
-double SubGLWindow::pixelYToViewport( int posY ) {
-	return minY + pixelVecYToViewport( posY );
+double SubGLWindow::pixelYToViewport(int posY)
+{
+    return minY + pixelVecYToViewport(posY);
 }
 
+void SubGLWindow::preDraw()
+{
 
+    // Save current viewport settings
+    glGetIntegerv(GL_VIEWPORT, viewportSettings);
 
-void SubGLWindow::preDraw() {
+    // We want to always draw the curve editor in the upper-left corner
+    int actualPosY = viewportSettings[3] - editorSizeY - editorPosY;
+    glViewport(editorPosX, actualPosY, editorSizeX, editorSizeY);
+    glScissor(editorPosX, actualPosY, editorSizeX, editorSizeY);
+    glEnable(GL_SCISSOR_TEST);
 
-	// Save current viewport settings 
-	glGetIntegerv(GL_VIEWPORT, viewportSettings);
-
-	// We want to always draw the curve editor in the upper-left corner
-	int actualPosY = viewportSettings[3]-editorSizeY-editorPosY;
-	glViewport(editorPosX,actualPosY,editorSizeX,editorSizeY);
-	glScissor(editorPosX,actualPosY,editorSizeX,editorSizeY);
-	glEnable(GL_SCISSOR_TEST);
-
-
-	// Save projection matrix and sets it to a simple orthogonal projection
+    // Save projection matrix and sets it to a simple orthogonal projection
     glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glLoadIdentity();
-	gluOrtho2D(minX, maxX, minY, maxY);
-	
-	// Save model-view matrix and sets it to identity
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(minX, maxX, minY, maxY);
 
-	// Save the attributes and set them to basic values
-	glPushAttrib(GL_ENABLE_BIT|GL_POINT_BIT|GL_LINE_BIT);
-	glDisable(GL_LIGHTING);
-	glDisable(GL_DEPTH_TEST);
+    // Save model-view matrix and sets it to identity
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
 
-	// Clear the colors to draw on a black background
-	glClear(GL_COLOR_BUFFER_BIT);
+    // Save the attributes and set them to basic values
+    glPushAttrib(GL_ENABLE_BIT | GL_POINT_BIT | GL_LINE_BIT);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
 
-	glColor3d(0,0,0);
-	glBegin(GL_QUADS);
-		glVertex2d(minX, minY);
-		glVertex2d(maxX, minY);
-		glVertex2d(maxX, maxY);
-		glVertex2d(minX, maxY);
-	glEnd();
+    // Clear the colors to draw on a black background
+    glClear(GL_COLOR_BUFFER_BIT);
 
+    glColor3d(0, 0, 0);
+    glBegin(GL_QUADS);
+    glVertex2d(minX, minY);
+    glVertex2d(maxX, minY);
+    glVertex2d(maxX, maxY);
+    glVertex2d(minX, maxY);
+    glEnd();
 }
 
 /**
 	What needs to be done after the subwindow is drawn into
 */
-void SubGLWindow::postDraw() {
-	
-	glPopAttrib();
-	glPopMatrix();
+void SubGLWindow::postDraw()
+{
+
+    glPopAttrib();
+    glPopMatrix();
     glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	
-	// Restore viewport
-    glViewport(viewportSettings[0], viewportSettings[1], viewportSettings[2], viewportSettings[3]);
-	glDisable(GL_SCISSOR_TEST);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+
+    // Restore viewport
+    glViewport(viewportSettings[0], viewportSettings[1], viewportSettings[2],
+               viewportSettings[3]);
+    glDisable(GL_SCISSOR_TEST);
 }

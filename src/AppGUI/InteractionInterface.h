@@ -24,51 +24,48 @@
 #pragma once
 
 #include <GLUtils/GLTexture.h>
-#include <Utils/Timer.h>
 #include <MathLib/Vector3d.h>
+#include <Utils/Timer.h>
 
 /**
 	This class is used to display an openGL sub-window that the user can interact with by clicking on it. When a mouse event takes place,
 	this class can process it, and returns a vector that represents the location, relative to the center of the sub-window, of the mouse click.
 	This information can then be processed in whatever way is desired.
 */
-class InteractionInterface{
+class InteractionInterface
+{
 private:
-	//The background for the interaction interface is given by this texture.
-	GLTexture* interfaceBg;
+    //The background for the interaction interface is given by this texture.
+    GLTexture *interfaceBg;
 
-	//this is the size of the interface
-	int size;
+    //this is the size of the interface
+    int size;
 
-	//and this is where the sub-window should appear in the main window
-	int posX, posY;
+    //and this is where the sub-window should appear in the main window
+    int posX, posY;
 
-	//the center-most portion of the interface can optionally remain unused. This is the radius of the unused region
-	double unusedCenter;
+    //the center-most portion of the interface can optionally remain unused. This is the radius of the unused region
+    double unusedCenter;
 
-	//when a mouse is clicked, we will still be drawing the feedback arrow for a bit. We'll use this timer for that.
-	Timer t;
-	//and this is the vector that we should be drawing
-	Vector3d inputVector;
+    //when a mouse is clicked, we will still be drawing the feedback arrow for a bit. We'll use this timer for that.
+    Timer t;
+    //and this is the vector that we should be drawing
+    Vector3d inputVector;
 
 public:
-	InteractionInterface(char* bgName, int posX, int posY, int size);
-	~InteractionInterface(void);
+    InteractionInterface(char *bgName, int posX, int posY, int size);
+    ~InteractionInterface(void);
 
-	/**
+    /**
 		This method is used to draw the interaction interface
 	*/
-	void drawInterface();
+    void drawInterface();
 
-	/**
+    /**
 		This method is used to process a mouse event - we'll treat all of them the same. The mouse coordinates
 		are assumed to be passed in window coordinates. If the mouse is outside of the interaction interface,
 		this method returns false and does not modify result. Otherwise this method returns false, and result
 		will be set to the vector from the mouse click to the center of the window.
 	*/
-	bool handleMouseEvent(int mouseX, int mouseY, Vector3d* result);
-
+    bool handleMouseEvent(int mouseX, int mouseY, Vector3d *result);
 };
-
-
-

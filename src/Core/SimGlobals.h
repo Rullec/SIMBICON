@@ -26,7 +26,6 @@
 #include <MathLib/Vector3d.h>
 #include <Physics/ODEWorld.h>
 
-
 #define LEFT_STANCE 0
 #define RIGHT_STANCE 1
 
@@ -34,57 +33,54 @@
 	This class is used as a container for all the constants that are pertinent for the physical simulations, the controllers, etc.
 */
 
-class SimGlobals {
+class SimGlobals
+{
 public:
-	//We will assume that the gravity is in the y-direction (this can easily be changed if need be), and this value gives its magnitude. 
-	static double gravity;
-	//this is the direction of the up-vector
-	static Vector3d up;
-	//if this is set to true, then the heading of the character is controlled, otherwise it is free to do whatever it wants
-	static int forceHeadingControl;
-	//this variable is used to specify the desired heading of the character
-	static double desiredHeading;
-	//and this is the desired time interval for each simulation timestep (does not apply to animations that are played back).
-	static double dt;
+    //We will assume that the gravity is in the y-direction (this can easily be changed if need be), and this value gives its magnitude.
+    static double gravity;
+    //this is the direction of the up-vector
+    static Vector3d up;
+    //if this is set to true, then the heading of the character is controlled, otherwise it is free to do whatever it wants
+    static int forceHeadingControl;
+    //this variable is used to specify the desired heading of the character
+    static double desiredHeading;
+    //and this is the desired time interval for each simulation timestep (does not apply to animations that are played back).
+    static double dt;
 
-	static AbstractRBEngine* activeRbEngine;
+    static AbstractRBEngine *activeRbEngine;
 
-	//temp..
-	static double targetPos;
-	static double targetPosX;
-	static double targetPosZ;
+    //temp..
+    static double targetPos;
+    static double targetPosX;
+    static double targetPosZ;
 
-	static double conInterpolationValue;
-	static double bipDesiredVelocity;
+    static double conInterpolationValue;
+    static double bipDesiredVelocity;
 
-	static int constraintSoftness;
+    static int constraintSoftness;
 
-	static int CGIterCount;
-	static int linearizationCount;
+    static int CGIterCount;
+    static int linearizationCount;
 
-	static double rootSagittal;
-	static double rootLateral;
-	static double swingHipSagittal;
-	static double swingHipLateral;
-	static double stanceAngleSagittal;
-	static double stanceAngleLateral;
-	static double stanceKnee;
+    static double rootSagittal;
+    static double rootLateral;
+    static double swingHipSagittal;
+    static double swingHipLateral;
+    static double stanceAngleSagittal;
+    static double stanceAngleLateral;
+    static double stanceKnee;
 
+    static double COMOffsetX;
+    static double COMOffsetZ;
 
-	static double COMOffsetX;
-	static double COMOffsetZ;
+    SimGlobals(void) {}
+    ~SimGlobals(void) {}
 
-
-	SimGlobals(void){
-	}
-	~SimGlobals(void){
-	}
-
-	inline static AbstractRBEngine* getRBEngine(){
-		if (activeRbEngine == NULL)
-			activeRbEngine = new ODEWorld();
-		return activeRbEngine;
-//		return new PhysEng();
-	}
-
+    inline static AbstractRBEngine *getRBEngine()
+    {
+        if (activeRbEngine == NULL)
+            activeRbEngine = new ODEWorld();
+        return activeRbEngine;
+        //		return new PhysEng();
+    }
 };

@@ -31,80 +31,78 @@
 	state of the Simbicon controller that is used and also the contact forces that are acting on the character. The forces are necessary because
 	the control will be using them - the simulation will actually be ok without them, since they are recomputed before integration anyway.
 */
-typedef struct {
-	//hold the world state here
-	DynamicArray<double> worldState;
-	//hold the state of the controller here:
-	SimBiControllerState conState;
-	//position of the last stance foot - used to compute step lengths
-	Point3d lastFootPos;
-	//and this is used to hold the contact force information
-	DynamicArray<ContactPoint> cfi;
+typedef struct
+{
+    //hold the world state here
+    DynamicArray<double> worldState;
+    //hold the state of the controller here:
+    SimBiControllerState conState;
+    //position of the last stance foot - used to compute step lengths
+    Point3d lastFootPos;
+    //and this is used to hold the contact force information
+    DynamicArray<ContactPoint> cfi;
 } SimBiConFrameworkState;
 
 /**
 	This class is used for Simbicon control.
 */
 
-class SimBiConFramework : public BaseControlFramework{
-	friend class ControllerEditor;
-private:
-	//this is the controller that we will use.
-	SimBiController* con;
+class SimBiConFramework : public BaseControlFramework
+{
+    friend class ControllerEditor;
 
-	//we'll keep track of the vector that represents each step taken. The vector will be represented in the 'relative' world coordinate frame
-	Vector3d lastStepTaken;
-	//this is the position of the foot at the previous state
-	Point3d lastFootPos;
+private:
+    //this is the controller that we will use.
+    SimBiController *con;
+
+    //we'll keep track of the vector that represents each step taken. The vector will be represented in the 'relative' world coordinate frame
+    Vector3d lastStepTaken;
+    //this is the position of the foot at the previous state
+    Point3d lastFootPos;
 
 public:
-	SimBiConFramework(char* input, char* conFile = NULL);
-	virtual ~SimBiConFramework(void);
+    SimBiConFramework(char *input, char *conFile = NULL);
+    virtual ~SimBiConFramework(void);
 
-	/**
+    /**
 		this method is used to advance the simulation. Typically, we will first compute the control, and then we will take one
 		simulation step. If we are to apply control at this point in the simulation, we can either use a controller to recompute it,
 		or we can use the values that were set before. This method returns true if the controller transitions to a new state, false
 		otherwise.
 	*/
-	virtual bool advanceInTime(double dt, bool applyControl = true, bool recomputeTorques = true, bool advanceWorldInTime = true);
+    virtual bool advanceInTime(double dt, bool applyControl = true,
+                               bool recomputeTorques = true,
+                               bool advanceWorldInTime = true);
 
-	/**
+    /**
 		this method is used to load the conroller settings/states from a file.
 	*/
-	void loadFromFile(char* fName);
+    void loadFromFile(char *fName);
 
-	/**
+    /**
 		this method is used to return the quaternion that represents the to
 		'rel world frame' transformation. This is the coordinate frame that the desired pose
 		is computed relative to.
 	*/
-	inline Quaternion getCharacterFrame(){
-		return con->getCharacterFrame();
-	}
+    inline Quaternion getCharacterFrame() { return con->getCharacterFrame(); }
 
-	/**
+    /**
 		This method returns the controller that is being used.
 	*/
-	SimBiController* getController(){
-		return con;
-	}
+    SimBiController *getController() { return con; }
 
-	/**
+    /**
 		populates the structure that is passed in with the state of the framework
 	*/
-	void getState(SimBiConFrameworkState* conFState);
+    void getState(SimBiConFrameworkState *conFState);
 
-	/**
+    /**
 		populates the state of the framework with information passed in with the state of the framework
 	*/
-	void setState(SimBiConFrameworkState& conFState);
+    void setState(SimBiConFrameworkState &conFState);
 
-	/**
+    /**
 		this method returns the vector that corresponds to the last step taken
 	*/
-	inline Vector3d getLastStepTaken(){
-		return lastStepTaken;
-	}
-
+    inline Vector3d getLastStepTaken() { return lastStepTaken; }
 };
