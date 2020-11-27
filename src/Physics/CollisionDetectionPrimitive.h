@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include <Utils/Utils.h>
 #include <MathLib/TransformationMatrix.h>
+#include <Utils/Utils.h>
 
 /*========================================================================================================================================================================*
  * This class implements an interface for collision detection primitives such as spheres, capsules and so on.                                                             *
@@ -42,29 +42,26 @@ class BoxCDP;
 #define PLANE_CDP 3
 #define BOX_CDP 4
 
-
-
-class CollisionDetectionPrimitive{
+class CollisionDetectionPrimitive
+{
 protected:
-	//keep track of the rigid body that this collision detection primitive belongs to - useful to update world coordinates, etc
-	RigidBody* bdy;
-	int type;
+    //keep track of the rigid body that this collision detection primitive belongs to - useful to update world coordinates, etc
+    RigidBody *bdy;
+    int type;
 
 public:
-	CollisionDetectionPrimitive(RigidBody* theBody);
-	virtual ~CollisionDetectionPrimitive(void);
+    CollisionDetectionPrimitive(RigidBody *theBody);
+    virtual ~CollisionDetectionPrimitive(void);
 
-	virtual void updateToWorldPrimitive() = 0;
+    virtual void updateToWorldPrimitive() = 0;
 
-	/**
+    /**
 		draw an outline of the primitive...
 	*/
-	virtual void draw();
+    virtual void draw();
 
-	/**
+    /**
 		returns the type of this collision detection primitive.
 	*/
-	inline int getType(){return type;}
-
+    inline int getType() { return type; }
 };
-

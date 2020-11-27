@@ -24,32 +24,35 @@
 #include "ArticulatedRigidBody.h"
 #include <Physics/Joint.h>
 
-
-ArticulatedRigidBody::ArticulatedRigidBody(void){
-	this->pJoint = NULL;
-	this->AFParent = NULL;
+ArticulatedRigidBody::ArticulatedRigidBody(void)
+{
+    this->pJoint = NULL;
+    this->AFParent = NULL;
 }
 
-ArticulatedRigidBody::~ArticulatedRigidBody(void){
-	//delete all the child joints
-	for (uint i=0;i<cJoints.size();i++)
-		delete cJoints[i];
+ArticulatedRigidBody::~ArticulatedRigidBody(void)
+{
+    //delete all the child joints
+    for (uint i = 0; i < cJoints.size(); i++)
+        delete cJoints[i];
 }
 
 /**
 	This method draws the current rigid body.
 */
-void ArticulatedRigidBody::draw(int flags){
-	RigidBody::draw(flags);
-	
-	if (!pJoint)
-		return;
+void ArticulatedRigidBody::draw(int flags)
+{
+    RigidBody::draw(flags);
 
-	if (flags & SHOW_JOINTS){
-		//we will draw a little sphere at the location of the joint (we'll do it twice - once for the parent and one for the child. They should coincide
-		//if the joint constraint is properly satisfied
-		GLUtils::drawSphere(this->getWorldCoordinates(pJoint->cJPos), 0.02, 4);
-		GLUtils::drawSphere(pJoint->parent->getWorldCoordinates(pJoint->pJPos), 0.02, 4);
-	}
+    if (!pJoint)
+        return;
+
+    if (flags & SHOW_JOINTS)
+    {
+        //we will draw a little sphere at the location of the joint (we'll do it twice - once for the parent and one for the child. They should coincide
+        //if the joint constraint is properly satisfied
+        GLUtils::drawSphere(this->getWorldCoordinates(pJoint->cJPos), 0.02, 4);
+        GLUtils::drawSphere(pJoint->parent->getWorldCoordinates(pJoint->pJPos),
+                            0.02, 4);
+    }
 }
-

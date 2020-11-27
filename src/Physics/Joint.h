@@ -37,116 +37,115 @@
  * are all rotationals joints with 1, 2 or 3 degrees of freedom. The default type of joint is a Ball in Socket joint with no joint limits.                               *
  *=======================================================================================================================================================================*/
 class AbstractRBEngine;
-class Joint{
-friend class ArticulatedFigure;
-friend class ArticulatedRigidBody;
-friend class BallInSocketJoint;
-friend class HingeJoint;
-friend class UniversalJoint;
-friend class ODEWorld;
-friend class Character;
-friend class SimBiController;
-friend class PoseController;
-protected:
-	//this is the parent link
-	ArticulatedRigidBody* parent;
-	//this is the location of the joint on the parent body - expressed in the parent's local coordinates
-	Point3d pJPos;
-	//this is the child link
-	ArticulatedRigidBody* child;
-	//this is the location of the joint on the child body - expressed in the child's local coordinates 
-	//NOTE: the locations of the parent and child joint locations must overlap in world coordinates
-	Point3d cJPos;
-	//this variable is used to indicate if this joint has joint limits or not (the details regarding the limits are specified on a per joint type basis)
-	bool useJointLimits;
-	//the torque applied to this joint. It should be set/reset by a controller acting on this joint.
-	Vector3d torque;
-	//this is the name of the joint
-	char name[100];
+class Joint
+{
+    friend class ArticulatedFigure;
+    friend class ArticulatedRigidBody;
+    friend class BallInSocketJoint;
+    friend class HingeJoint;
+    friend class UniversalJoint;
+    friend class ODEWorld;
+    friend class Character;
+    friend class SimBiController;
+    friend class PoseController;
 
-	/**
+protected:
+    //this is the parent link
+    ArticulatedRigidBody *parent;
+    //this is the location of the joint on the parent body - expressed in the parent's local coordinates
+    Point3d pJPos;
+    //this is the child link
+    ArticulatedRigidBody *child;
+    //this is the location of the joint on the child body - expressed in the child's local coordinates
+    //NOTE: the locations of the parent and child joint locations must overlap in world coordinates
+    Point3d cJPos;
+    //this variable is used to indicate if this joint has joint limits or not (the details regarding the limits are specified on a per joint type basis)
+    bool useJointLimits;
+    //the torque applied to this joint. It should be set/reset by a controller acting on this joint.
+    Vector3d torque;
+    //this is the name of the joint
+    char name[100];
+
+    /**
 		This method is used to compute the relative orientation between the parent and the child rigid bodies, expressed in 
 		the frame coordinate of the parent.
 	*/
-	void computeRelativeOrientation(Quaternion& qRel);
+    void computeRelativeOrientation(Quaternion &qRel);
 
-	/**
+    /**
 		This method is used to fix the joint angular constraint to correct for drift. This is done by changing
 		the orientation of the child relative to the parent
 	*/
-	virtual void fixAngularConstraint(const Quaternion& qRel) = 0;
+    virtual void fixAngularConstraint(const Quaternion &qRel) = 0;
 
-	/**
+    /**
 		This method is used to pass in information regarding the rotation axes. The string that is passed in is expected to have
 		been read from an input file.
 	*/
-	virtual void readAxes(char* axes);
+    virtual void readAxes(char *axes);
 
-	/**
+    /**
 		This method is used to pass information regarding the joint limits for a joint. The string that is passed in is expected to
 		have been read from an input file.
 	*/
-	virtual void readJointLimits(char* limits);
-
+    virtual void readJointLimits(char *limits);
 
 public:
-	/**
+    /**
 		Default constructor
 	*/
-	Joint(void);
+    Joint(void);
 
-	/**
+    /**
 		Default destructor
 	*/
-	virtual ~Joint(void);
+    virtual ~Joint(void);
 
-	/**
+    /**
 		This method is used to automatically fix the errors in the joints (i.e. drift errors caused by numercial integration). At some future
 		point it can be changed into a proper stabilization technique.
 	*/
-	void fixJointConstraints(bool fixOrientations, bool fixVelocities, bool recursive);
+    void fixJointConstraints(bool fixOrientations, bool fixVelocities,
+                             bool recursive);
 
-	/**
+    /**
 		This method is used to load the details of a joint from file. The PhysicalWorld parameter points to the world in which the objects
 		that need to be linked live in.
 	*/
-	void loadFromFile(FILE* fp, AbstractRBEngine* world);
+    void loadFromFile(FILE *fp, AbstractRBEngine *world);
 
-	/**
+    /**
 		Returns the type of the current joint
 	*/
-	virtual int getJointType() = 0;
+    virtual int getJointType() = 0;
 
-	/**
+    /**
 		sets the torque
 	*/
-	inline void setTorque(const Vector3d& t){torque = t;}
+    inline void setTorque(const Vector3d &t) { torque = t; }
 
-	/**
+    /**
 		retrieves the reference to the body's parent
 	*/
-	inline ArticulatedRigidBody* getParent(){return parent;}
+    inline ArticulatedRigidBody *getParent() { return parent; }
 
-	/**
+    /**
 		retrieves the reference to the child's parent
 	*/
-	inline ArticulatedRigidBody* getChild(){return child;}
+    inline ArticulatedRigidBody *getChild() { return child; }
 
-	/**
+    /**
 		returns the position of the child joint, expressed in child's coordinates
 	*/
-	inline Point3d getChildJointPosition(){return cJPos;}
+    inline Point3d getChildJointPosition() { return cJPos; }
 
-	/**
+    /**
 		returns the position of the parent joint, expressed in parent's coordinates
 	*/
-	inline Point3d getParentJointPosition(){return pJPos;}
+    inline Point3d getParentJointPosition() { return pJPos; }
 
-	/**
+    /**
 		returns the name of this joint
 	*/
-	inline const char* getName() { return name; }
-
+    inline const char *getName() { return name; }
 };
-
-

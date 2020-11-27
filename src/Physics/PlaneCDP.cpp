@@ -22,34 +22,34 @@
 */
 
 #include "./PlaneCDP.h"
-#include <Physics/SphereCDP.h>
 #include <Physics/CapsuleCDP.h>
 #include <Physics/RigidBody.h>
+#include <Physics/SphereCDP.h>
 
-PlaneCDP::PlaneCDP(RigidBody* theBody, Vector3d n_, Point3d o_) : CollisionDetectionPrimitive(theBody){
-	//make sure we have a unit vector;
-	p.n = n_;
-	p.n.toUnit();
-	p.p = o_;
+PlaneCDP::PlaneCDP(RigidBody *theBody, Vector3d n_, Point3d o_)
+    : CollisionDetectionPrimitive(theBody)
+{
+    //make sure we have a unit vector;
+    p.n = n_;
+    p.n.toUnit();
+    p.p = o_;
 
-	type = PLANE_CDP;
+    type = PLANE_CDP;
 }
 
-PlaneCDP::~PlaneCDP(void){
-}
+PlaneCDP::~PlaneCDP(void) {}
 
-	
 /**
 	Draw an outline of the capsule
 */
-void PlaneCDP::draw(){
-	//we won't draw the plane...
+void PlaneCDP::draw()
+{
+    //we won't draw the plane...
 }
 
-
-void PlaneCDP::updateToWorldPrimitive(){
-//	bdy->state.orientation.fastRotate(p.n, &wP.n);
-	wP.n = bdy->getWorldCoordinates(p.n);
-	wP.p = bdy->getWorldCoordinates(p.p);
+void PlaneCDP::updateToWorldPrimitive()
+{
+    //	bdy->state.orientation.fastRotate(p.n, &wP.n);
+    wP.n = bdy->getWorldCoordinates(p.n);
+    wP.p = bdy->getWorldCoordinates(p.p);
 }
-

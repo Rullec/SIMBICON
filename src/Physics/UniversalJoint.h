@@ -29,56 +29,54 @@
  * This class is used to implement a universal joint - angular impulses that allow only two degrees of freedom between the parent and the child must be computed.       *
  *======================================================================================================================================================================*/
 
-class UniversalJoint : public Joint{
-friend class ODEWorld;
+class UniversalJoint : public Joint
+{
+    friend class ODEWorld;
+
 private:
-	//This joint can only rotate about the vector a, that is stored in parent coordinates
-	Vector3d a;
-	//or about vector b that is stored in child coordinates
-	Vector3d b;
-	//and the min and max allowed angles (around a axis)
-	double minAngleA, maxAngleA;
-	//and around the b axis
-	double minAngleB, maxAngleB;
+    //This joint can only rotate about the vector a, that is stored in parent coordinates
+    Vector3d a;
+    //or about vector b that is stored in child coordinates
+    Vector3d b;
+    //and the min and max allowed angles (around a axis)
+    double minAngleA, maxAngleA;
+    //and around the b axis
+    double minAngleB, maxAngleB;
 
 public:
-	UniversalJoint(char* axes);
-	~UniversalJoint(void);
+    UniversalJoint(char *axes);
+    ~UniversalJoint(void);
 
-	/**
+    /**
 		This method is used to pass in information regarding the rotation axes. The string that is passed in is expected to have
 		been read from an input file.
 	*/
-	virtual void readAxes(char* axes);
+    virtual void readAxes(char *axes);
 
-	/**
+    /**
 		This method is used to pass information regarding the joint limits for a joint. The string that is passed in is expected to
 		have been read from an input file.
 	*/
-	virtual void readJointLimits(char* limits);
+    virtual void readJointLimits(char *limits);
 
-	/**
+    /**
 		This method is used to fix the joint angular constraint to correct for drift. This is done by changing
 		the orientation of the child.
 	*/
-	virtual void fixAngularConstraint(const Quaternion& qRel);
+    virtual void fixAngularConstraint(const Quaternion &qRel);
 
-	/**
+    /**
 		Return the A rotation axis
 	*/
-	inline Vector3d getRotAxisA(){return a;}
+    inline Vector3d getRotAxisA() { return a; }
 
-	/**
+    /**
 		Return the B rotation axis
 	*/
-	inline Vector3d getRotAxisB(){return b;}
+    inline Vector3d getRotAxisB() { return b; }
 
-
-	/**
+    /**
 		Returns the type of the current joint
 	*/
-	virtual int getJointType(){ return UNIVERSAL_JOINT;}
-
+    virtual int getJointType() { return UNIVERSAL_JOINT; }
 };
-
-

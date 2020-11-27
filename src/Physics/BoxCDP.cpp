@@ -24,21 +24,17 @@
 #include "BoxCDP.h"
 #include <GLUtils/GLUtils.h>
 
-BoxCDP::BoxCDP(RigidBody* theBdy, Point3d& p1_, Point3d& p2_) : CollisionDetectionPrimitive(theBdy){
-	this->p1 = p1_;
-	this->p2 = p2_;
-	type = BOX_CDP;
+BoxCDP::BoxCDP(RigidBody *theBdy, Point3d &p1_, Point3d &p2_)
+    : CollisionDetectionPrimitive(theBdy)
+{
+    this->p1 = p1_;
+    this->p2 = p2_;
+    type = BOX_CDP;
 }
 
-
-BoxCDP::~BoxCDP(void){
-
-}
+BoxCDP::~BoxCDP(void) {}
 
 /**
 	Draw an outline of the box
 */
-void BoxCDP::draw(){
-	GLUtils::drawBox(p1, p2);
-}
-
+void BoxCDP::draw() { GLUtils::drawBox(p1, p2); }

@@ -27,28 +27,26 @@
 #include <Physics/PlaneCDP.h>
 #include <Physics/RigidBody.h>
 
-SphereCDP::SphereCDP(RigidBody* theBdy, Point3d& c_, double r_) : CollisionDetectionPrimitive(theBdy){
-	s.pos = c_;
-	s.radius = r_;
-	type = SPHERE_CDP;
+SphereCDP::SphereCDP(RigidBody *theBdy, Point3d &c_, double r_)
+    : CollisionDetectionPrimitive(theBdy)
+{
+    s.pos = c_;
+    s.radius = r_;
+    type = SPHERE_CDP;
 }
 
-SphereCDP::~SphereCDP(void){
-}
-
+SphereCDP::~SphereCDP(void) {}
 
 /**
 	Draw an outline of the sphere
 */
-void SphereCDP::draw(){
-	GLUtils::drawSphere(s.pos, s.radius, 5);
-}
+void SphereCDP::draw() { GLUtils::drawSphere(s.pos, s.radius, 5); }
 
 /**
 	updates the world sphere.
 */
-void SphereCDP::updateToWorldPrimitive(){
-	wS.pos = bdy->getWorldCoordinates(s.pos);
-	wS.radius = s.radius;
+void SphereCDP::updateToWorldPrimitive()
+{
+    wS.pos = bdy->getWorldCoordinates(s.pos);
+    wS.radius = s.radius;
 }
-

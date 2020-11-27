@@ -23,59 +23,52 @@
 
 #pragma once
 
-#include <Physics/CollisionDetectionPrimitive.h>
 #include <MathLib/Point3d.h>
 #include <MathLib/TransformationMatrix.h>
+#include <Physics/CollisionDetectionPrimitive.h>
 #include <Utils/Utils.h>
 
 /*========================================================================================================================================================================*
  * This class implements a rectangular box class that will be used as a collision detection primitive.                                                                    *
  * A box is represented by the position of two opposite corners.                                                                                                          *
  *========================================================================================================================================================================*/
-class BoxCDP : public CollisionDetectionPrimitive{
+class BoxCDP : public CollisionDetectionPrimitive
+{
 private:
-	//these are the two corners of the box, expressed in local coordinates.
-	Point3d p1, p2;
-	
+    //these are the two corners of the box, expressed in local coordinates.
+    Point3d p1, p2;
+
 public:
-	BoxCDP(RigidBody* theBdy, Point3d& p1_, Point3d& p2_);
-	virtual ~BoxCDP(void);
+    BoxCDP(RigidBody *theBdy, Point3d &p1_, Point3d &p2_);
+    virtual ~BoxCDP(void);
 
-	virtual void updateToWorldPrimitive(){}
+    virtual void updateToWorldPrimitive() {}
 
-	/**
+    /**
 		Draw an outline of the box
 	*/
-	virtual void draw();
+    virtual void draw();
 
-	/**
+    /**
 		return the center of the box, expressed in local coordinates
 	*/
-	inline Point3d getCenter(){
-		return Point3d((p1.x+p2.x)/2, (p1.y+p2.y)/2, (p1.z+p2.z)/2);
-	}
+    inline Point3d getCenter()
+    {
+        return Point3d((p1.x + p2.x) / 2, (p1.y + p2.y) / 2, (p1.z + p2.z) / 2);
+    }
 
-	/**
+    /**
 		returns the length in the x-direction
 	*/
-	inline double getXLen(){
-		return (fabs(p1.x-p2.x));
-	}
+    inline double getXLen() { return (fabs(p1.x - p2.x)); }
 
-	/**
+    /**
 		returns the length in the y-direction
 	*/
-	inline double getYLen(){
-		return (fabs(p1.y-p2.y));
-	}
+    inline double getYLen() { return (fabs(p1.y - p2.y)); }
 
-	/**
+    /**
 		returns the length in the z-direction
 	*/
-	inline double getZLen(){
-		return (fabs(p1.z-p2.z));
-	}
-
-
+    inline double getZLen() { return (fabs(p1.z - p2.z)); }
 };
-

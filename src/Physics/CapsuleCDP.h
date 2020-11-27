@@ -23,11 +23,11 @@
 
 #pragma once
 
-#include <Physics/CollisionDetectionPrimitive.h>
+#include <MathLib/Capsule.h>
 #include <MathLib/Point3d.h>
 #include <MathLib/TransformationMatrix.h>
+#include <Physics/CollisionDetectionPrimitive.h>
 #include <Utils/Utils.h>
-#include <MathLib/Capsule.h>
 
 /*========================================================================================================================================================================*
  * This class implements a capsule class that will be used as a collision detection primitive.                                                                            *
@@ -35,42 +35,37 @@
  * of the capsule. This will be used when evaluating the contact points with other primitives, and it needs to be updated any time the world position of the object that  *                      
  * owns this capsule changes.                                                                                                                                             *
  *========================================================================================================================================================================*/
-class CapsuleCDP : public CollisionDetectionPrimitive{
+class CapsuleCDP : public CollisionDetectionPrimitive
+{
 private:
-	//a capsule is really just an infinite number of spheres that have the center along a segment. Therefore, to define the capsule we need the
-	//two end points and the radius
-	Capsule c;
-	Capsule wC;
+    //a capsule is really just an infinite number of spheres that have the center along a segment. Therefore, to define the capsule we need the
+    //two end points and the radius
+    Capsule c;
+    Capsule wC;
+
 public:
-	CapsuleCDP(RigidBody* theBody, Point3d& a_, Point3d& b_, double r_);
-	~CapsuleCDP(void);
+    CapsuleCDP(RigidBody *theBody, Point3d &a_, Point3d &b_, double r_);
+    ~CapsuleCDP(void);
 
-	virtual void updateToWorldPrimitive();
+    virtual void updateToWorldPrimitive();
 
-	/**
+    /**
 		Draw an outline of the capsule
 	*/
-	virtual void draw();
+    virtual void draw();
 
-	/**
+    /**
 		return the radius of the sphere
 	*/
-	inline double getRadius(){
-		return this->c.radius;
-	}
+    inline double getRadius() { return this->c.radius; }
 
-	/**
+    /**
 		return the position of the first endpoint.
 	*/
-	inline Point3d getA(){
-		return c.p1;
-	}
+    inline Point3d getA() { return c.p1; }
 
-	/**
+    /**
 		return the position of the first endpoint.
 	*/
-	inline Point3d getB(){
-		return c.p2;
-	}
-
+    inline Point3d getB() { return c.p2; }
 };

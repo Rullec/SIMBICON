@@ -25,55 +25,54 @@
 
 #include <Physics/Joint.h>
 
-
 /*======================================================================================================================================================================*
  * This class is used to implement a hinge joint - angular impulses that allow relative rotation between the parent and the child only around a given axis must be      *
  * computed.                                                                                                                                                            *
  *======================================================================================================================================================================*/
 class Joint;
-class HingeJoint : public Joint{
-friend class ODEWorld;
+class HingeJoint : public Joint
+{
+    friend class ODEWorld;
+
 private:
-/**
+    /**
 	Quantities that do not change
 */
-	//This joint only allows relative motion about axis a - stored in parent coordinates
-	Vector3d a;
-	//keep track of the joint limits as well - min and max allowed angles around the rotation axis
-	double minAngle;
-	double maxAngle;
+    //This joint only allows relative motion about axis a - stored in parent coordinates
+    Vector3d a;
+    //keep track of the joint limits as well - min and max allowed angles around the rotation axis
+    double minAngle;
+    double maxAngle;
 
 public:
-	HingeJoint(char* axes);
-	virtual ~HingeJoint(void);
+    HingeJoint(char *axes);
+    virtual ~HingeJoint(void);
 
-	/**
+    /**
 		This method is used to pass in information regarding the rotation axes. The string that is passed in is expected to have
 		been read from an input file.
 	*/
-	virtual void readAxes(char* axes);
+    virtual void readAxes(char *axes);
 
-	/**
+    /**
 		This method is used to pass information regarding the joint limits for a joint. The string that is passed in is expected to
 		have been read from an input file.
 	*/
-	virtual void readJointLimits(char* limits);
+    virtual void readJointLimits(char *limits);
 
-	/**
+    /**
 		This method is used to fix the joint angular constraint to correct for drift. This is done by changing
 		the orientation of the child.
 	*/
-	virtual void fixAngularConstraint(const Quaternion& qRel);
+    virtual void fixAngularConstraint(const Quaternion &qRel);
 
-	/**
+    /**
 		Return the A rotation axis
 	*/
-	inline Vector3d getRotAxisA(){return a;}
+    inline Vector3d getRotAxisA() { return a; }
 
-	/**
+    /**
 		Returns the type of the current joint
 	*/
-	virtual int getJointType(){return HINGE_JOINT;}
-
-
+    virtual int getJointType() { return HINGE_JOINT; }
 };

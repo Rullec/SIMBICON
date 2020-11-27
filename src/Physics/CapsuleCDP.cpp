@@ -23,34 +23,36 @@
 
 #include "./CapsuleCDP.h"
 #include <GLUtils/GLUtils.h>
-#include <Physics/SphereCDP.h>
 #include <Physics/PlaneCDP.h>
 #include <Physics/RigidBody.h>
+#include <Physics/SphereCDP.h>
 
-CapsuleCDP::CapsuleCDP(RigidBody* theBody, Point3d& a_, Point3d& b_, double r_) : CollisionDetectionPrimitive(theBody){
-	this->c.p1 = a_;
-	this->c.p2 = b_;
-	this->c.radius = r_;
-	type = CAPSULE_CDP;
+CapsuleCDP::CapsuleCDP(RigidBody *theBody, Point3d &a_, Point3d &b_, double r_)
+    : CollisionDetectionPrimitive(theBody)
+{
+    this->c.p1 = a_;
+    this->c.p2 = b_;
+    this->c.radius = r_;
+    type = CAPSULE_CDP;
 }
 
-CapsuleCDP::~CapsuleCDP(void){
-}
-
+CapsuleCDP::~CapsuleCDP(void) {}
 
 /**
 	draw an outline of the capsule
 */
 
-void CapsuleCDP::draw(){
-	GLUtils::drawCylinder(this->c.radius, Vector3d(this->c.p1, this->c.p2), this->c.p1, 6);
-	GLUtils::drawSphere(this->c.p1, this->c.radius, 5);
-	GLUtils::drawSphere(this->c.p2, this->c.radius, 5);
+void CapsuleCDP::draw()
+{
+    GLUtils::drawCylinder(this->c.radius, Vector3d(this->c.p1, this->c.p2),
+                          this->c.p1, 6);
+    GLUtils::drawSphere(this->c.p1, this->c.radius, 5);
+    GLUtils::drawSphere(this->c.p2, this->c.radius, 5);
 }
 
-void CapsuleCDP::updateToWorldPrimitive(){
-	wC.p1 = bdy->getWorldCoordinates(c.p1);
-	wC.p2 = bdy->getWorldCoordinates(c.p2);
-	wC.radius = c.radius;
+void CapsuleCDP::updateToWorldPrimitive()
+{
+    wC.p1 = bdy->getWorldCoordinates(c.p1);
+    wC.p2 = bdy->getWorldCoordinates(c.p2);
+    wC.radius = c.radius;
 }
-
