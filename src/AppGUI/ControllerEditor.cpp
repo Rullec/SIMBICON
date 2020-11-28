@@ -437,7 +437,7 @@ void ControllerEditor::processTask()
         }
     }
 }
-
+#include "Utils/LogUtil.h"
 int trajectoryToEdit(ClientData clientData, Tcl_Interp *interp, int argc,
                      CONST84 char **argv)
 {
@@ -457,6 +457,7 @@ int trajectoryToEdit(ClientData clientData, Tcl_Interp *interp, int argc,
     if (!trajectory)
         return TCL_ERROR;
 
+#ifdef ENABLE_SIMBICON_EDITOR
     obj->clearEditedCurves();
     for (uint i = 0; i < trajectory->components.size(); ++i)
     {
@@ -466,7 +467,10 @@ int trajectoryToEdit(ClientData clientData, Tcl_Interp *interp, int argc,
     {
         obj->addEditedCurve(trajectory->strengthTraj);
     }
-
+#endif
+#ifndef ENABLE_SIMBICON_EDITOR
+    CON_WARN("the simbicon editor has been ignored");
+#endif
     return TCL_OK;
 }
 
@@ -570,6 +574,7 @@ int getComponentNames(ClientData clientData, Tcl_Interp *interp, int argc,
     if (!trajectory)
         return TCL_ERROR;
 
+#ifdef ENABLE_SIMBICON_EDITOR
     DynamicArray<const char *> componentNames;
     for (uint i = 0; i < trajectory->components.size(); ++i)
     {
@@ -584,6 +589,10 @@ int getComponentNames(ClientData clientData, Tcl_Interp *interp, int argc,
         delete[] componentNames[i];
 
     Tcl_SetResult(interp, result, TCL_DYNAMIC);
+#endif
+#ifndef ENABLE_SIMBICON_EDITOR
+    CON_WARN("the simbicon editor has been ignored");
+#endif
     return TCL_OK;
 }
 

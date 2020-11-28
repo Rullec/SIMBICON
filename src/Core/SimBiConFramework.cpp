@@ -22,6 +22,7 @@
 */
 
 #include "SimBiConFramework.h"
+#include "CustomSimBiController.h"
 #include "SimGlobals.h"
 #include <Core/PoseController.h>
 #include <Core/SimBiController.h>
@@ -58,7 +59,7 @@ SimBiConFramework::SimBiConFramework(char *input, char *conFile)
                        "~200 characters - not allowed");
         char *line = lTrim(buffer);
         int lineType = getConLineType(line);
-        std::cout << "line type = " << lineType << std::endl;
+        // std::cout << "line type = " << lineType << std::endl;
         switch (lineType)
         {
         case LOAD_RB_FILE:
@@ -68,7 +69,8 @@ SimBiConFramework::SimBiConFramework(char *input, char *conFile)
             if (bip == NULL && pw->getAFCount() > 0)
             {
                 bip = new Character(pw->getAF(0));
-                con = new SimBiController(bip);
+                // con = new SimBiController(bip);
+                con = new CSimBiController(bip);
             }
             printf("[debug] load rigidbody/multibody from %s succ\n",
                    trim(line));

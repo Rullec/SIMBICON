@@ -22,6 +22,7 @@
 */
 
 #include "BalanceFeedback.h"
+#include "Utils/JsonUtil.h"
 #include <Core/ConUtils.h>
 #include <Core/SimBiController.h>
 #include <Physics/Joint.h>
@@ -127,4 +128,79 @@ void LinearBalanceFeedback::writeToFile(FILE *f)
         fprintf(f, "\t\t\t\t%s %lf\n", getConLineString(CON_V_MAX), vMax);
 
     fprintf(f, "\t\t\t%s\n", getConLineString(CON_FEEDBACK_END));
+}
+
+/**
+ * \brief           load the feedback config from json
+ *  1. load Cd, Cv
+ *  2. load axis
+*/
+CustomBalanceFeedback::CustomBalanceFeedback() {}
+CustomBalanceFeedback::~CustomBalanceFeedback() {}
+void CustomBalanceFeedback::loadFromFile(const Json::Value &root_)
+{
+    mCd_lst.clear();
+    mCv_lst.clear();
+    mAxes_lst.clear();
+
+    for (int i = 0; i < root_.size(); i++)
+    {
+        Json::Value value = root_[i];
+        double cd = JsonUtil::ParseAsDouble("Cd", value);
+        double cv = JsonUtil::ParseAsDouble("Cv", value);
+        Vector3d balance_axis, affected_axis;
+        {
+            Vector axis =
+                JsonUtil::ReadVectorJson(JsonUtil::ParseAsValue("axis", value));
+            balance_axis.setX(axis[0]);
+            balance_axis.setY(axis[1]);
+            balance_axis.setZ(axis[2]);
+        }
+        {
+            Vector axis = JsonUtil::ReadVectorJson(
+                JsonUtil::ParseAsValue("affected_axis", value));
+            affected_axis.setX(axis[0]);
+            affected_axis.setY(axis[1]);
+            affected_axis.setZ(axis[2]);
+        }
+        mCd_lst.push_back(cd);
+        mCv_lst.push_back(cv);
+        mAxes_lst.push_back(balance_axis);
+        mAffectedAxes_lst.push_back(affected_axis);
+    }
+}
+
+double CustomBalanceFeedback::getFeedbackContribution(SimBiController *con,
+                                                      Joint *j, double phi,
+                                                      Vector3d d, Vector3d v)
+{
+
+    CON_ERROR("prohibited");
+    return 0;
+}
+void CustomBalanceFeedback::writeToFile(FILE *fp) { CON_ERROR("prohibited"); }
+void CustomBalanceFeedback::loadFromFile(FILE *fp) { CON_ERROR("prohibited"); }
+
+Quaternion CustomBalanceFeedback::getFeedbackRotation(SimBiController *con,
+                                                      Joint *j, double phi,
+                                                      Vector3d d, Vector3d v)
+{
+    Quaternion rot = Quaternion(1, 0, 0, 0);
+    int num = mCd_lst.size();
+    for (int i = 0; i < num; i++)
+    {
+        double cd = this->mCd_lst[i], cv = mCv_lst[i];
+        Vector3d dot_axis = mAxes_lst[i];
+        double d_offset = d.dotProductWith(dot_axis),
+               v_offset = v.dotProductWith(dot_axis);
+        double angle = cd * d_offset + cv * v_offset;
+        Vector3d affected_axis = mAffectedAxes_lst[i];
+        Quaternion rot_comp =
+            Quaternion::getRotationQuaternion(angle, affected_axis);
+        // std::cout << "[feedback] dot_axis = " << dot_axis
+        //           << " affected_axis = " << affected_axis
+        //           << " angle = " << angle << std::endl;
+        rot = rot_comp * rot;
+    }
+    return rot;
 }

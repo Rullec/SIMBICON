@@ -23,6 +23,7 @@
 
 #include "SimBiController.h"
 #include "ConUtils.h"
+#include "CustomSimBiConState.h"
 #include "SimGlobals.h"
 #include <Utils/Utils.h>
 
@@ -435,11 +436,14 @@ void SimBiController::computeTorques(DynamicArray<ContactPoint> *cfs)
     //d and v are specified in the rotation (heading) invariant coordinate frame
     updateDAndV();
 
-    //there are two stages here. First we will compute the pose (i.e. relative orientations), using the joint trajectories for the current state
-    //and then we will compute the PD torques that are needed to drive the links towards their orientations - here the special case of the
-    //swing and stance hips will need to be considered
-
-    //always start from a neutral desired pose, and build from there...
+    /*
+        there are two stages here. First we will compute the pose(i.e. relative orientations), 
+        using the joint trajectories for the current state
+        and then we will compute the PD torques that are needed
+        to drive the links towards their orientations - here the special case of the
+        swing and stance hips will need to be considered
+        always start from a neutral desired pose, and build from there...
+    */
     for (int i = 0; i < jointCount; i++)
     {
         poseRS.setJointRelativeOrientation(Quaternion(1, 0, 0, 0), i);
@@ -817,6 +821,18 @@ void SimBiController::loadFromFile(char *fName)
             //now we have to resolve all the joint names (i.e. figure out which joints they apply to).
             resolveJoints(tempState);
             break;
+        case CON_CUSTOM_STATE_START:
+            tempState = new CustomSimBiConState();
+            sscanf(line, "%d", &tempStateNr);
+            printf("[debug] begin to load custom simbicon state %d\n",
+                   tempStateNr);
+            if (tempStateNr != stateOffset + this->states.size())
+                throwError("Inccorect state offset specified: %d", tempStateNr);
+            states.push_back(tempState);
+            tempState->readState(f, stateOffset);
+            //now we have to resolve all the joint names (i.e. figure out which joints they apply to).
+            resolveJoints(tempState);
+            break;
         case CON_STANCE_HIP_DAMPING:
             sscanf(line, "%lf", &stanceHipDamping);
             break;
@@ -873,4 +889,67 @@ SimBiConState *SimBiController::getState(uint idx)
     if (idx >= states.size())
         return NULL;
     return states[idx];
+}
+
+bool SimBiController::isBodyInContactWithTheGround()
+{
+    return bodyTouchedTheGround;
+}
+double SimBiController::getPhase() { return phi; }
+
+Point3d SimBiController::getStanceFootPos()
+{
+    if (stanceFoot)
+        return stanceFoot->getCMPosition();
+    return Point3d(0, 0, 0);
+}
+Point3d SimBiController::getSwingFootPos()
+{
+    if (swingFoot)
+        return swingFoot->getCMPosition();
+    return Point3d(0, 0, 0);
+}
+
+int SimBiController::getFSMState() { return this->FSMStateIndex; }
+
+Quaternion SimBiController::getCharacterFrame() { return characterFrame; }
+
+int SimBiController::getStance() { return stance; }
+
+// Evaluate the D trajectory
+void SimBiController::computeD0(double phi, Vector3d *d0)
+{
+    SimBiConState *currState = states[getFSMState()];
+    computeDorV(phi, currState->dTrajX, currState->dTrajZ, stance, d0);
+}
+
+// Evaluate the V trajectory
+void SimBiController::computeV0(double phi, Vector3d *v0)
+{
+    SimBiConState *currState = states[getFSMState()];
+    computeDorV(phi, currState->vTrajX, currState->vTrajZ, stance, v0);
+}
+
+/**
+ * \brief               compute d or v
+ * \param phi           phase time 
+ * \param trajX         given the reference trajectory X coordinate
+ * \param trajZ         given the reference trajectory Z coordinate
+ * \param stance        left stance, right stance?
+ * \param result        d or v vector3d result
+*/
+void SimBiController::computeDorV(double phi, Trajectory1D *trajX,
+                                  Trajectory1D *trajZ, int stance,
+                                  Vector3d *result)
+{
+    result->y = 0;
+    double signReverse = (stance == RIGHT_STANCE) ? -1 : 1;
+    if (trajX == NULL)
+        result->x = 0;
+    else
+        result->x = trajX->evaluate_catmull_rom(phi) * signReverse;
+    if (trajZ == NULL)
+        result->z = 0;
+    else
+        result->z = trajZ->evaluate_catmull_rom(phi);
 }

@@ -47,6 +47,7 @@ class Joint
     friend class ODEWorld;
     friend class Character;
     friend class SimBiController;
+    friend class CSimBiController;
     friend class PoseController;
 
 protected:

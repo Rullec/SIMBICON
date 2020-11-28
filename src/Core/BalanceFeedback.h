@@ -22,7 +22,9 @@
 */
 
 #pragma once
+#include <MathLib/Quaternion.h>
 #include <MathLib/Vector3d.h>
+#define USE_CUSTOM_FSM
 
 class SimBiController;
 class Joint;
@@ -30,7 +32,10 @@ class Joint;
 /**
 	This generic class provides an interface for classes that provide balance feedback for controllers for physically simulated characters.
 */
-
+namespace Json
+{
+class Value;
+};
 class BalanceFeedback
 {
 public:
@@ -46,6 +51,27 @@ public:
                                            Vector3d v) = 0;
     virtual void writeToFile(FILE *fp) = 0;
     virtual void loadFromFile(FILE *fp) = 0;
+};
+
+class CustomBalanceFeedback : public BalanceFeedback
+{
+public:
+    CustomBalanceFeedback(void);
+    virtual ~CustomBalanceFeedback(void);
+    virtual void loadFromFile(const Json::Value &root);
+    virtual double getFeedbackContribution(SimBiController *con, Joint *j,
+                                           double phi, Vector3d d,
+                                           Vector3d v) override;
+    virtual void writeToFile(FILE *fp) override;
+    virtual void loadFromFile(FILE *fp) override;
+    virtual Quaternion getFeedbackRotation(SimBiController *con, Joint *j,
+                                           double phi, Vector3d d, Vector3d v);
+
+protected:
+    std::vector<double> mCd_lst;
+    std::vector<double> mCv_lst;
+    std::vector<Vector3d> mAxes_lst;
+    std::vector<Vector3d> mAffectedAxes_lst;
 };
 
 /**

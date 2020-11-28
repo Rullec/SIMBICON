@@ -22,298 +22,119 @@
 */
 
 #include "SimBiConState.h"
+#include "CustomSimTraj.h"
 #include "SimBiController.h"
 #include "SimGlobals.h"
 #include <Utils/Utils.h>
 using namespace std;
-/** 
-	Update this component to recenter it around the new given D and V trajectories
-*/
-void TrajectoryComponent::updateComponent(
-    SimBiController *con, Joint *j, Trajectory1D &newDTrajX,
-    Trajectory1D &newDTrajZ, Trajectory1D &newVTrajX, Trajectory1D &newVTrajZ,
-    Trajectory1D *oldDTrajX, Trajectory1D *oldDTrajZ, Trajectory1D *oldVTrajX,
-    Trajectory1D *oldVTrajZ, int nbSamples)
+/**
+		default constructor
+	*/
+SimBiConState::SimBiConState(void)
 {
+    strcpy(description, "Uninitialized state");
+    nextStateIndex = -1;
+    this->stateTime = 0;
+    transitionOnFootContact = true;
+    minPhiBeforeTransitionOnFootContact = 0.5;
+    minSwingFootForceForContact = 20.0;
+    reverseStance = false;
+    keepStance = false;
 
-    if (bFeedback == NULL)
-        return;
-
-    double startPhi = 0;
-    double endPhi = 0;
-    if (baseTraj.getKnotCount() > 0)
-    {
-        startPhi = min(startPhi, baseTraj.getMinPosition());
-        endPhi = min(startPhi, baseTraj.getMaxPosition());
-    }
-    if (newDTrajX.getKnotCount() > 0)
-    {
-        startPhi = max(startPhi, newDTrajX.getMinPosition());
-        endPhi = max(startPhi, newDTrajX.getMaxPosition());
-    }
-
-    Trajectory1D result;
-    Vector3d d0, v0, newD0, newV0;
-    for (int i = 0; i < nbSamples; ++i)
-    {
-        double interp = (double)i / (nbSamples - 1.0);
-        double phi = startPhi * (1.0 - interp) + endPhi * interp;
-
-        double baseAngle = 0;
-        if (baseTraj.getKnotCount() > 0)
-            baseAngle = baseTraj.evaluate_catmull_rom(phi);
-        SimBiController::computeDorV(phi, &newDTrajX, &newDTrajZ, LEFT_STANCE,
-                                     &newD0);
-        SimBiController::computeDorV(phi, &newVTrajX, &newVTrajZ, LEFT_STANCE,
-                                     &newV0);
-        SimBiController::computeDorV(phi, oldDTrajX, oldDTrajZ, LEFT_STANCE,
-                                     &d0);
-        SimBiController::computeDorV(phi, oldVTrajX, oldVTrajZ, LEFT_STANCE,
-                                     &v0);
-
-        double feedback = computeFeedback(con, j, phi, newD0 - d0, newV0 - v0);
-
-        if (reverseAngleOnLeftStance)
-            baseAngle -= feedback;
-        else
-            baseAngle += feedback;
-
-        result.addKnot(phi, baseAngle);
-    }
-    result.simplify_catmull_rom(0.005);
-    baseTraj.copy(result);
+    dTrajX = NULL;
+    dTrajZ = NULL;
+    vTrajX = NULL;
+    vTrajZ = NULL;
 }
 
 /**
-	This method is used to read the knots of a base trajectory from the file, where they are specified one (knot) on a line
+    destructor
 */
-void TrajectoryComponent::writeBaseTrajectory(FILE *f)
+SimBiConState::~SimBiConState(void)
 {
-    if (f == NULL)
-        return;
-
-    fprintf(f, "\t\t\t%s\n", getConLineString(CON_BASE_TRAJECTORY_START));
-
-    for (int i = 0; i < baseTraj.getKnotCount(); ++i)
-    {
-        fprintf(f, "\t\t\t\t%lf %lf\n", baseTraj.getKnotPosition(i),
-                baseTraj.getKnotValue(i));
-    }
-
-    fprintf(f, "\t\t\t%s\n", getConLineString(CON_BASE_TRAJECTORY_END));
+    for (uint i = 0; i < sTraj.size(); i++)
+        delete sTraj[i];
 }
 
 /**
-	This method is used to write a trajectory to a file
+    this method is used to determine the new stance, based on the information in this state and the old stance
 */
-void TrajectoryComponent::writeTrajectoryComponent(FILE *f)
+int SimBiConState::getStateStance(int oldStance)
 {
-    if (f == NULL)
-        return;
-
-    fprintf(f, "\t\t%s\n", getConLineString(CON_TRAJ_COMPONENT));
-
-    fprintf(f, "\t\t\t%s %lf %lf %lf\n", getConLineString(CON_ROTATION_AXIS),
-            rotationAxis.x, rotationAxis.y, rotationAxis.z);
-
-    if (reverseAngleOnLeftStance)
-        fprintf(f, "\t\t\t%s left\n",
-                getConLineString(CON_REVERSE_ANGLE_ON_STANCE));
-    else if (reverseAngleOnRightStance)
-        fprintf(f, "\t\t\t%s right\n",
-                getConLineString(CON_REVERSE_ANGLE_ON_STANCE));
-
-    if (bFeedback)
-        bFeedback->writeToFile(f);
-
-    writeBaseTrajectory(f);
-
-    fprintf(f, "\t\t%s\n", getConLineString(CON_TRAJ_COMPONENT_END));
+    if (keepStance == true)
+        return oldStance;
+    if (reverseStance == false)
+        return stateStance;
+    if (oldStance == LEFT_STANCE)
+        return RIGHT_STANCE;
+    return LEFT_STANCE;
 }
 
 /**
-	This method is used to read a trajectory from a file
+    Returns the time we're expecting to spend in this state
 */
-void TrajectoryComponent::readTrajectoryComponent(FILE *f)
+double SimBiConState::getStateTime() { return stateTime; }
+
+/**
+    this method is used to retrieve the index of the next state 
+*/
+int SimBiConState::getNextStateIndex() { return nextStateIndex; }
+
+/**
+    this method is used to return the number of trajectories for this state
+*/
+int SimBiConState::getTrajectoryCount() { return sTraj.size(); }
+
+/**
+    Access a given trajectory
+*/
+Trajectory *SimBiConState::getTrajectory(uint idx)
 {
-    if (f == NULL)
-        throwError("File pointer is NULL - cannot read gain coefficients!!");
-
-    //have a temporary buffer used to read the file line by line...
-    char buffer[200];
-    char tmpString[200];
-
-    //this is where it happens.
-    while (!feof(f))
-    {
-        //get a line from the file...
-        fgets(buffer, 200, f);
-        if (strlen(buffer) > 195)
-            throwError("The input file contains a line that is longer than "
-                       "~200 characters - not allowed");
-        char *line = lTrim(buffer);
-        int lineType = getConLineType(line);
-        switch (lineType)
-        {
-        case CON_TRAJ_COMPONENT_END:
-            //we're done...
-            return;
-            break;
-        case CON_COMMENT:
-            break;
-        case CON_ROTATION_AXIS:
-            if (sscanf(line, "%lf %lf %lf", &this->rotationAxis.x,
-                       &this->rotationAxis.y, &this->rotationAxis.z) != 3)
-                throwError("The axis for a trajectory is specified by three "
-                           "parameters!");
-            this->rotationAxis.toUnit();
-            break;
-        case CON_FEEDBACK_START:
-            //read the kind of feedback that is applicable to this state
-            if (sscanf(line, "%s", tmpString) != 1)
-                throwError("The kind of feedback to be used for a trajectory "
-                           "must be specified (e.g. linear)");
-            delete bFeedback;
-            bFeedback = NULL;
-            if (strncmp(tmpString, "linear", 6) == 0)
-            {
-                bFeedback = new LinearBalanceFeedback();
-                bFeedback->loadFromFile(f);
-            }
-            else
-                throwError("Unrecognized type of feedback: \'%s\'", line);
-            break;
-        case CON_BASE_TRAJECTORY_START:
-            //read in the base trajectory
-            SimBiConState::readTrajectory1D(f, baseTraj,
-                                            CON_BASE_TRAJECTORY_END);
-            break;
-        case CON_REVERSE_ANGLE_ON_STANCE:
-            if (strncmp(trim(line), "left", 4) == 0)
-                reverseAngleOnLeftStance = true;
-            else if (strncmp(trim(line), "right", 5) == 0)
-                reverseAngleOnRightStance = true;
-            else
-                throwError("When using the \'startingStance\' keyword, "
-                           "\'left\' or \'right\' must be specified!");
-            break;
-        case CON_NOT_IMPORTANT:
-            tprintf("Ignoring input line: \'%s\'\n", line);
-            break;
-        default:
-            throwError(
-                "Incorrect SIMBICON input file: \'%s\' - unexpected line.",
-                buffer);
-        }
-    }
-    throwError("Incorrect SIMBICON input file: No \'/trajectory\' found ",
-               buffer);
+    if (idx >= sTraj.size())
+        return NULL;
+    return sTraj[idx];
 }
 
 /**
-	This method is used to write the knots of a strength trajectory to the file, where they are specified one (knot) on a line
+    Access a given trajectory by name
 */
-void Trajectory::writeStrengthTrajectory(FILE *f)
+Trajectory *SimBiConState::getTrajectory(const char *name)
 {
-    if (f == NULL || strengthTraj == NULL)
-        return;
-
-    fprintf(f, "\t\t\t%s\n", getConLineString(CON_STRENGTH_TRAJECTORY_START));
-
-    for (int i = 0; i < strengthTraj->getKnotCount(); ++i)
-    {
-        fprintf(f, "\t\t\t\t%lf %lf\n", strengthTraj->getKnotPosition(i),
-                strengthTraj->getKnotValue(i));
-    }
-
-    fprintf(f, "\t\t\t%s\n", getConLineString(CON_STRENGTH_TRAJECTORY_END));
+    for (uint i = 0; i < sTraj.size(); i++)
+        if (strcmp(sTraj[i]->jName, name) == 0)
+            return sTraj[i];
+    return NULL;
 }
 
 /**
-	This method is used to write a trajectory to a file
+    This method is used to determine if, based on the parameters passed in and the type of state this is,
+    the current state in the controller FSM needs to be transitioned from.
 */
-void Trajectory::writeTrajectory(FILE *f)
+bool SimBiConState::needTransition(double phi, double swingFootVerticalForce,
+                                   double stanceFootVerticalForce)
 {
-    if (f == NULL)
-        return;
-
-    fprintf(f, "\t%s %s\n", getConLineString(CON_TRAJECTORY_START), jName);
-
-    if (relToCharFrame)
-        fprintf(f, "\t%s\n", getConLineString(CON_CHAR_FRAME_RELATIVE));
-
-    if (strengthTraj != NULL)
-        writeStrengthTrajectory(f);
-
-    for (uint i = 0; i < components.size(); ++i)
+    //if it is a foot contact based transition
+    if (transitionOnFootContact == true)
     {
-        fprintf(f, "\n");
-        components[i]->writeTrajectoryComponent(f);
+        //transition if we have a meaningful foot contact, and if it does not happen too early on...
+        if ((phi > minPhiBeforeTransitionOnFootContact &&
+             swingFootVerticalForce > minSwingFootForceForContact) ||
+            phi >= 1)
+            return true;
+        return false;
     }
 
-    fprintf(f, "\t%s\n", getConLineString(CON_TRAJECTORY_END));
+    //otherwise it must be a time-based transition
+    if (phi >= 1)
+        return true;
+
+    return false;
 }
 
 /**
-	This method is used to read a trajectory from a file
+    This method makes it possible to access the state description
 */
-void Trajectory::readTrajectory(FILE *f)
-{
-    if (f == NULL)
-        throwError("File pointer is NULL - cannot read gain coefficients!!");
-
-    //have a temporary buffer used to read the file line by line...
-    char buffer[200];
-
-    TrajectoryComponent *newComponent;
-
-    //this is where it happens.
-    while (!feof(f))
-    {
-        //get a line from the file...
-        fgets(buffer, 200, f);
-        if (strlen(buffer) > 195)
-            throwError("The input file contains a line that is longer than "
-                       "~200 characters - not allowed");
-        char *line = lTrim(buffer);
-        int lineType = getConLineType(line);
-        switch (lineType)
-        {
-        case CON_STRENGTH_TRAJECTORY_START:
-            //read in the base trajectory
-            if (strengthTraj != NULL)
-                throwError("Two strength trajectory, this is illegal!");
-            strengthTraj = new Trajectory1D();
-            SimBiConState::readTrajectory1D(f, *strengthTraj,
-                                            CON_STRENGTH_TRAJECTORY_END);
-            break;
-        case CON_TRAJECTORY_END:
-            //we're done...
-            return;
-            break;
-        case CON_CHAR_FRAME_RELATIVE:
-            relToCharFrame = true;
-            break;
-        case CON_COMMENT:
-            break;
-        case CON_TRAJ_COMPONENT:
-            //read in the base trajectory
-            newComponent = new TrajectoryComponent();
-            newComponent->readTrajectoryComponent(f);
-            components.push_back(newComponent);
-            break;
-        case CON_NOT_IMPORTANT:
-            tprintf("Ignoring input line: \'%s\'\n", line);
-            break;
-        default:
-            throwError(
-                "Incorrect SIMBICON input file: \'%s\' - unexpected line.",
-                buffer);
-        }
-    }
-    throwError("Incorrect SIMBICON input file: No \'/trajectory\' found ",
-               buffer);
-}
+const char *SimBiConState::getDescription() { return description; }
 
 /**
 	This method is used to read the state parameters from a file
@@ -341,6 +162,9 @@ void SimBiConState::readState(FILE *f, int offset)
         {
         case CON_STATE_END:
             //we're done...
+            return;
+            break;
+        case CON_CUSTOM_STATE_END:
             return;
             break;
         case CON_NEXT_STATE:
@@ -389,16 +213,23 @@ void SimBiConState::readState(FILE *f, int offset)
             strcpy(tempTraj->jName, trim(line));
             printf("[debug] read joint %s trajectory\n", tempTraj->jName);
             tempTraj->readTrajectory(f);
-            this->sTraj.push_back(tempTraj);
+            sTraj.push_back(tempTraj);
             break;
 
+        case CON_CUSTOM_TRAJECTORY_START:
+            tempTraj = new CustomTrajectory();
+            strcpy(tempTraj->jName, trim(line));
+            printf("[debug] read joint %s custom trajectory\n",
+                   tempTraj->jName);
+            tempTraj->readTrajectory(f);
+            sTraj.push_back(tempTraj);
+            break;
         case CON_D_TRAJX_START:
             if (dTrajX != NULL)
                 throwError("Two dTrajX trajectory, this is illegal!");
             dTrajX = new Trajectory1D();
             readTrajectory1D(f, *dTrajX, CON_D_TRAJX_END);
             break;
-
         case CON_D_TRAJZ_START:
             if (dTrajZ != NULL)
                 throwError("Two dTrajZ trajectory, this is illegal!");

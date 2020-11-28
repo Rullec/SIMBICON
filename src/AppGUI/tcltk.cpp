@@ -373,7 +373,7 @@ int Tcl_AppInit(Tcl_Interp *interp)
     int ret = Tcl_EvalFile(interp, file);
     if (ret != TCL_OK)
     {
-        printf("[error] tcl eval file %s, ret %d\n", file, ret);
+        printf("[error] init: tcl eval file %s ret %d\n", file, ret);
         fprintf(stderr, "ERROR when reading file %s: %s\n", file,
                 Tcl_GetStringResult(interp));
         // Most convenient access for this is to run a tiny Tcl script.
@@ -454,7 +454,7 @@ int pipeIn(ClientData clientData, Tcl_Interp *interp, int argc,
     auto ret = Tcl_EvalFile(interp, argv[1]); /* read in file & interpret */
     if (ret != TCL_OK)
     {
-        printf("[error] tcl eval file %s, ret %d\n", argv[1], ret);
+        printf("[error] pipein tcl eval file %s ret %d\n", argv[1], ret);
         fprintf(stderr, "ERROR when reading file %s: %s\n", argv[1],
                 Tcl_GetStringResult(interp));
         // Most convenient access for this is to run a tiny Tcl script.

@@ -33,6 +33,7 @@
 class Character
 {
     friend class SimBiController;
+    friend class CSimBiController;
 
 private:
     //this is the reference to the articulated figure that the character represents

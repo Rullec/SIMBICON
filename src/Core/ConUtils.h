@@ -76,7 +76,12 @@
 
 #define CON_MAX_FEEDBACK 56
 #define CON_MIN_FEEDBACK 57
-
+#define CON_CUSTOM_STATE_START 58
+#define CON_CUSTOM_STATE_END 59
+#define CON_CUSTOM_TRAJECTORY_START 60
+#define CON_CUSTOM_TRAJECTORY_END 61
+#define CON_CUSTOM_TRAJ_COMPONENT_START 62
+#define CON_CUSTOM_TRAJ_COMPONENT_END 63
 /**
 	This method is used to determine the type of a line that was used in the input file for a rigid body.
 	It is assumed that there are no white spaces at the beginning of the string that is passed in. the pointer buffer

@@ -1,0 +1,241 @@
+{
+    "num_of_states": 4,
+    "states": [
+        {
+            "state_id": 0,
+            "elapsed_time": 0.4,
+            "conditions": [
+                {
+                    "condition_type": "ElapsedTime",
+                    "target_state_id": 1
+                }
+            ],
+            "stance_update_mode": "same",
+            "trajectories": {
+                "SWING_Hip": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": -0.6,
+                    "feedback": [
+                        {
+                            "affected_axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "Cd": -0.5,
+                            "Cv": -0.2
+                        },
+                        {
+                            "affected_axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "Cd": 0.5,
+                            "Cv": 0.2
+                        }
+                    ]
+                },
+                "SWING_Knee": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": 1.2
+                }
+            }
+        },
+        {
+            "state_id": 1,
+            "elapsed_time": 0.4,
+            "conditions": [
+                {
+                    "condition_type": "LinkContact",
+                    "target_state_id": 2
+                }
+            ],
+            "stance_update_mode": "reverse",
+            "trajectories": {
+                "SWING_Hip": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": 0,
+                    "feedback": [
+                        {
+                            "affected_axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "Cd": -0.5,
+                            "Cv": -0.2
+                        },
+                        {
+                            "affected_axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "Cd": 0.5,
+                            "Cv": 0.2
+                        }
+                    ]
+                },
+                "SWING_Knee": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": 0
+                }
+            }
+        },
+        {
+            "state_id": 2,
+            "elapsed_time": 0.4,
+            "conditions": [
+                {
+                    "condition_type": "ElapsedTime",
+                    "target_state_id": 3
+                }
+            ],
+            "stance_update_mode": "same",
+            "trajectories": {
+                "SWING_Hip": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": -0.6,
+                    "feedback": [
+                        {
+                            "affected_axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "Cd": -0.5,
+                            "Cv": -0.2
+                        },
+                        {
+                            "affected_axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "Cd": 0.5,
+                            "Cv": 0.2
+                        }
+                    ]
+                },
+                "SWING_Knee": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": 1.2
+                }
+            }
+        },
+        {
+            "state_id": 3,
+            "elapsed_time": 0.4,
+            "conditions": [
+                {
+                    "condition_type": "LinkContact",
+                    "target_state_id": 0
+                }
+            ],
+            "stance_update_mode": "reverse",
+            "trajectories": {
+                "SWING_Hip": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": 0,
+                    "feedback": [
+                        {
+                            "affected_axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "Cd": -0.5,
+                            "Cv": -0.2
+                        },
+                        {
+                            "affected_axis": [
+                                0,
+                                0,
+                                1
+                            ],
+                            "axis": [
+                                1,
+                                0,
+                                0
+                            ],
+                            "Cd": 0.5,
+                            "Cv": 0.2
+                        }
+                    ]
+                },
+                "SWING_Knee": {
+                    "axis": [
+                        1,
+                        0,
+                        0
+                    ],
+                    "angle": 0
+                }
+            }
+        }
+    ]
+}

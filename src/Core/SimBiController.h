@@ -56,7 +56,7 @@ class SimBiController : public PoseController
     friend class SimbiconPlayer;
     friend class ControllerEditor;
 
-private:
+protected:
     /**
 	These are quantities that are set only once
 */
@@ -68,6 +68,7 @@ private:
     //we also need to keep track of the joint indices in the articulated figure for the two hips, since they are special
     int lHipIndex;
     int rHipIndex;
+
     //this is a collection of the states that are used in the controller
     DynamicArray<SimBiConState *> states;
 
@@ -122,43 +123,44 @@ private:
 		This method is used to set the current FSM state of the controller to that of the index that
 		is passed in.
 	*/
-    void setFSMStateTo(int index);
+    virtual void setFSMStateTo(int index);
 
     /**
 		This method should be called when the controller transitions to this state.
 	*/
-    void transitionToState(int stateIndex);
+    virtual void transitionToState(int stateIndex);
 
     /**
 		This method returns the net force on the body rb, acting from the ground
 	*/
-    Vector3d getForceOn(RigidBody *rb, DynamicArray<ContactPoint> *cfs);
+    virtual Vector3d getForceOn(RigidBody *rb, DynamicArray<ContactPoint> *cfs);
 
     /**
 		This method returns the net force on the body rb, acting from the ground
 	*/
-    Vector3d getForceOnFoot(RigidBody *foot, DynamicArray<ContactPoint> *cfs);
+    virtual Vector3d getForceOnFoot(RigidBody *foot,
+                                    DynamicArray<ContactPoint> *cfs);
 
     /**
 		This method is used to determine if the rigid body that is passed in as a parameter is a
 		part of a foot
 	*/
-    bool isFoot(RigidBody *rb);
+    virtual bool isFoot(RigidBody *rb);
 
     /**
 		This method returns true if the rigid body that is passed in as a parameter is a swing foot, false otherwise
 	*/
-    bool isStanceFoot(RigidBody *rb);
+    virtual bool isStanceFoot(RigidBody *rb);
 
     /**
 		This method returns true if the rigid body that is passed in as a parameter is a swing foot, false otherwise
 	*/
-    bool isSwingFoot(RigidBody *rb);
+    virtual bool isSwingFoot(RigidBody *rb);
 
     /**
 		This method is used to return the ratio of the weight that is supported by the stance foot.
 	*/
-    double getStanceFootWeightRatio(DynamicArray<ContactPoint> *cfs);
+    virtual double getStanceFootWeightRatio(DynamicArray<ContactPoint> *cfs);
 
     /**
 		This method is used to compute the torques that need to be applied to the stance and swing hips, given the
@@ -167,24 +169,24 @@ private:
 		between 0 and 1, and it corresponds to the percentage of the total net vertical force that rests on the stance
 		foot.
 	*/
-    void computeHipTorques(const Quaternion &qRootD,
-                           const Quaternion &qSwingHipD,
-                           double stanceHipToSwingHipRatio);
+    virtual void computeHipTorques(const Quaternion &qRootD,
+                                   const Quaternion &qSwingHipD,
+                                   double stanceHipToSwingHipRatio);
 
     /**
 		This method is used to resolve the names (map them to their index) of the joints
 	*/
-    void resolveJoints(SimBiConState *state);
+    virtual void resolveJoints(SimBiConState *state);
 
     /**
 		This method is used to set the stance 
 	*/
-    void setStance(int newStance);
+    virtual void setStance(int newStance);
 
     /**
 		This method is used to return a pointer to a rigid body, based on its name and the current stance of the character
 	*/
-    RigidBody *getRBBySymbolicName(char *sName);
+    virtual RigidBody *getRBBySymbolicName(char *sName);
 
 public:
     //keep a copy of the initial character state, starting stance and file that contains the character's initial state
@@ -213,121 +215,92 @@ public:
 		used to determine when to transition to a new state. This method returns -1 if the controller does not advance to a new state,
 		or the index of the state that it transitions to otherwise.
 	*/
-    int advanceInTime(double dt, DynamicArray<ContactPoint> *cfs);
+    virtual int advanceInTime(double dt, DynamicArray<ContactPoint> *cfs);
 
     /**
 		This method is used to populate the structure that is passed in with the current state
 		of the controller;
 	*/
-    void getControllerState(SimBiControllerState *cs);
+    virtual void getControllerState(SimBiControllerState *cs);
 
     /**
 		This method is used to populate the state of the controller, using the information passed in the
 		structure
 	*/
-    void setControllerState(const SimBiControllerState &cs);
+    virtual void setControllerState(const SimBiControllerState &cs);
 
     /**
 		This method loads all the pertinent information regarding the simbicon controller from a file.
 	*/
-    void loadFromFile(char *fName);
+    virtual void loadFromFile(char *fName);
 
     /**
 		This method is used to return the value of bodyGroundContact
 	*/
-    inline bool isBodyInContactWithTheGround() { return bodyTouchedTheGround; }
+    virtual bool isBodyInContactWithTheGround();
 
     /**
 		This method is used to return the value of the phase (phi) in the current FSM state.
 	*/
-    inline double getPhase() { return phi; }
+    virtual double getPhase();
 
     /**
 		This method returns the position of the CM of the stance foot, in world coordinates
 	*/
-    inline Point3d getStanceFootPos()
-    {
-        if (stanceFoot)
-            return stanceFoot->getCMPosition();
-        return Point3d(0, 0, 0);
-    }
+    virtual Point3d getStanceFootPos();
 
     /**
 		This method returns the position of the CM of the swing foot, in world coordinates
 	*/
-    inline Point3d getSwingFootPos()
-    {
-        if (swingFoot)
-            return swingFoot->getCMPosition();
-        return Point3d(0, 0, 0);
-    }
+    virtual Point3d getSwingFootPos();
 
     /**
 		This method is used to write the current controller to a file
 	*/
-    void writeToFile(char *fileName, char *stateFileName = NULL);
+    virtual void writeToFile(char *fileName, char *stateFileName = NULL);
 
     /**
 		This method is used to return the current state number
 	*/
-    inline int getFSMState() { return this->FSMStateIndex; }
+    virtual int getFSMState();
 
     /**
 		This method returns the character frame orientation
 	*/
-    Quaternion getCharacterFrame() { return characterFrame; }
+    virtual Quaternion getCharacterFrame();
 
     /**
 		This method is used to update the d and v parameters, as well as recompute the character coordinate frame.
 	*/
-    void updateDAndV();
+    virtual void updateDAndV();
 
     /**
 		This makes it possible to externally access the states of this controller
 		Returns null if the index is out of range
 	 */
-    SimBiConState *getState(uint idx);
+    virtual SimBiConState *getState(uint idx);
 
     /**
 		This method makes it possible to evaluate the debug pose at any phase angle
 		Negative phase angle = Use the current controller phase angle
 	*/
-    void updateTrackingPose(DynamicArray<double> &trackingPose,
-                            double phiToUse = -1);
+    virtual void updateTrackingPose(DynamicArray<double> &trackingPose,
+                                    double phiToUse = -1);
 
     /**
 		this method returns the stance of the character
 	*/
-    inline int getStance() { return stance; }
+    virtual int getStance();
 
     // Evaluate the D trajectory
-    inline void computeD0(double phi, Vector3d *d0)
-    {
-        SimBiConState *currState = states[getFSMState()];
-        computeDorV(phi, currState->dTrajX, currState->dTrajZ, stance, d0);
-    }
+    virtual void computeD0(double phi, Vector3d *d0);
 
     // Evaluate the V trajectory
-    inline void computeV0(double phi, Vector3d *v0)
-    {
-        SimBiConState *currState = states[getFSMState()];
-        computeDorV(phi, currState->vTrajX, currState->vTrajZ, stance, v0);
-    }
+    virtual void computeV0(double phi, Vector3d *v0);
 
     // Evaluate the V trajectory
-    inline static void computeDorV(double phi, Trajectory1D *trajX,
+    static void computeDorV(double phi, Trajectory1D *trajX,
                                    Trajectory1D *trajZ, int stance,
-                                   Vector3d *result)
-    {
-        result->y = 0;
-        double signReverse = (stance == RIGHT_STANCE) ? -1 : 1;
-        if (trajX == NULL)
-            result->x = 0;
-        else
-            result->x = trajX->evaluate_catmull_rom(phi) * signReverse;
-        if (trajZ == NULL)
-            result->z = 0;
-        else
-            result->z = trajZ->evaluate_catmull_rom(phi);
-    }
+                                   Vector3d *result);
+    
 };
