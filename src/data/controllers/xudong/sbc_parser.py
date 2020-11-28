@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 
@@ -5,8 +6,6 @@ import os
 '''
 parse the joint target trajectory in simbicon
 '''
-
-sbc_path = "backWalk_havetorso_notoe.sbc"
 
 STATE_BEGIN_KEY = "ConState"
 STATE_END_KEY = "/ConState"
@@ -55,7 +54,6 @@ def find_begin_and_end_lst(full_cont, begin_key, end_key):
     assert len(begin_lst) == len(end_lst)
     return begin_lst, end_lst
 
-
 def parse_component(cont):
     '''
         return rotation axis, and base trajectory
@@ -88,13 +86,15 @@ def parse_component(cont):
         assert len(num) == 2
         phase_lst.append(num[0])
         angle_lst.append(num[1])
+
+    # phase_lst, angle_lst = handle_phase_angle_catmull_rom(phase_lst, angle_lst)
     return axis, phase_lst, angle_lst
 
 
 def parse_trajectory(cont):
     '''
         Given the trajectory content, parse the trajectory, return the angle-time knots
-        return trajectory 
+        return trajectory
     '''
     print(f"parse traj: {cont[-1].strip()[:len(TRAJ_END_KEY)]}")
     assert cont[0].strip()[:len(TRAJ_BEGIN_KEY)] == TRAJ_BEGIN_KEY
@@ -145,16 +145,21 @@ def parse_constate(cont):
     return constate
 
 
-with open(sbc_path, 'r') as f:
-    cont = f.readlines()
+def load_sbc(sbc_path):
+    with open(sbc_path, 'r') as f:
+        cont = f.readlines()
 
-    # find all constate begin lst and constate end lst
-    constate_begin_lst, constate_end_lst = find_begin_and_end_lst(
-        cont, STATE_BEGIN_KEY, STATE_END_KEY)
+        # find all constate begin lst and constate end lst
+        constate_begin_lst, constate_end_lst = find_begin_and_end_lst(
+            cont, STATE_BEGIN_KEY, STATE_END_KEY)
 
-    # parse each con state
-    for i in range(len(constate_begin_lst)):
-        print(cont[constate_begin_lst[i]])
-        print(cont[constate_end_lst[i]])
-        constate = parse_constate(cont[constate_begin_lst[i]: constate_end_lst[i] + 1])
-        print(constate)
+        # parse each con state
+        constate_lst = []
+        for i in range(len(constate_begin_lst)):
+            print(cont[constate_begin_lst[i]])
+            print(cont[constate_end_lst[i]])
+            constate = parse_constate(
+                cont[constate_begin_lst[i]: constate_end_lst[i] + 1])
+            constate_lst.append(constate)
+
+        return constate_lst
