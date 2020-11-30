@@ -133,7 +133,7 @@ ArticulatedFigure
 		parent pelvis
 		child lUpperleg
 		jointPPos 0.1 -0.05 0.0
-		jointCPos 0 0.21 0
+		jointCPos 0 0.05 0
 		jointLimits -1.3 1.9 -1 1 -0.25 1
 	/Joint	
 	
@@ -142,7 +142,7 @@ ArticulatedFigure
 		parent lUpperleg
 		child lLowerleg
 		jointPPos 0 -0.26 0
-		jointCPos 0 0.21 0
+		jointCPos 0 0.11 0
 		jointLimits 0 2.5
 	/Joint
 	
@@ -160,7 +160,7 @@ ArticulatedFigure
 		parent pelvis
 		child rUpperleg
 		jointPPos -0.1 -0.05 0.0
-		jointCPos 0 0.21 0
+		jointCPos 0 0.05 0
 		jointLimits -1.3 1.9 -1 1 -1 0.25
 	/Joint
 
@@ -169,7 +169,7 @@ ArticulatedFigure
 		parent rUpperleg
 		child rLowerleg
 		jointPPos 0 -0.26 0
-		jointCPos 0 0.21 0
+		jointCPos 0 0.11 0
 		jointLimits 0 2.5
 	/Joint
 
